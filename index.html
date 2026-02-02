@@ -3,125 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galeria Particular</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Galeria Futurista | Vitor & Maria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Playfair+Display:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --ouro: #c5a059;
-            --preto: #1a1a1a;
-            --fundo: #f5f5f5;
+            --primary: #c5a059;
+            --dark: #0a0a0b;
+            --glass: rgba(255, 255, 255, 0.05);
+            --gradient: linear-gradient(135deg, #0a0a0b 0%, #1a1a2e 100%);
         }
 
         body {
-            background-color: var(--fundo);
-            color: var(--preto);
+            background: var(--gradient);
+            color: #fff;
             font-family: 'Playfair Display', serif;
             margin: 0;
-            scroll-behavior: smooth;
+            overflow-x: hidden;
+            padding-bottom: 120px; /* Espaço para o player Spotify */
         }
 
         header {
             text-align: center;
             padding: 60px 20px;
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 4px;
         }
 
+        /* Container de 11 fotos */
+        .grid-galeria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Moldura Futurista com Fade-In */
         .moldura {
-            background: white;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid #ddd;
-            max-width: 90%;
-            width: 450px;
-            margin: 40px auto;
+            border-radius: 5px;
+            opacity: 0; /* Começa invisível para o Fade-In */
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
-            transition: transform 0.4s;
+        }
+
+        .moldura.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Reação ao passar o mouse (Hover Dinâmico) */
+        .moldura:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.2);
+            transform: scale(1.03) rotate(1deg);
         }
 
         .moldura img {
             width: 100%;
             height: auto;
-            display: block;
+            border-radius: 2px;
+            filter: brightness(0.8) contrast(1.1);
+            transition: 0.5s;
         }
 
-        .legenda {
-            margin-top: 15px;
-            text-align: right;
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-            font-style: italic;
+        .moldura:hover img {
+            filter: brightness(1) contrast(1.2);
         }
 
-        #btn-musica {
+        /* Player Estilo Spotify */
+        .spotify-player {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 11, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             z-index: 1000;
-            background: var(--ouro);
+            box-sizing: border-box;
+        }
+
+        .track-info { display: flex; align-items: center; gap: 15px; width: 30%; }
+        .track-text h4 { margin: 0; font-size: 0.9rem; color: #fff; }
+        .track-text p { margin: 0; font-size: 0.7rem; color: var(--primary); }
+
+        .controls { flex: 1; display: flex; flex-direction: column; align-items: center; }
+        .play-btn {
+            background: #fff;
             border: none;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            font-size: 20px;
+            transition: 0.2s;
+        }
+        .play-btn:hover { transform: scale(1.1); background: var(--primary); }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 400px;
+            height: 4px;
+            background: #333;
+            margin-top: 10px;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        #progress-inner {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 600px) {
+            .track-info { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <audio id="musica-tema" loop>
-        <source src="11 - Campari.mp3" type="audio/mpeg">
+    <header>
+        <h1>SYSTEM_LOVE_v1.0</h1>
+        <p style="font-size: 0.8rem; color: var(--primary);">ESTEEMED GALLERY FOR MARIA EDUARDA</p>
+    </header>
+
+    <div class="grid-galeria">
+        <div class="moldura"><img src="foto1.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">INIT_01</div></div>
+        <div class="moldura"><img src="foto2.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_02</div></div>
+        <div class="moldura"><img src="foto3.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_03</div></div>
+        <div class="moldura"><img src="foto4.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_04</div></div>
+        <div class="moldura"><img src="foto5.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_05</div></div>
+        <div class="moldura"><img src="foto6.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_06</div></div>
+        <div class="moldura"><img src="foto7.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_07</div></div>
+        <div class="moldura"><img src="foto8.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_08</div></div>
+        <div class="moldura"><img src="foto9.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_09</div></div>
+        <div class="moldura"><img src="foto10.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">DATA_10</div></div>
+        <div class="moldura"><img src="foto11.jpeg"><div style="margin-top:10px; font-size: 0.8rem;">END_11</div></div>
+    </div>
+
+    <div class="spotify-player">
+        <div class="track-info">
+            <div style="width: 40px; height: 40px; background: var(--primary); border-radius: 4px;"></div>
+            <div class="track-text">
+                <h4>11 - Campari</h4>
+                <p>Vitor & Maria</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="play-btn" id="master-play">▶</button>
+            <div class="progress-bar"><div id="progress-inner"></div></div>
+        </div>
+        
+        <div style="width: 30%; text-align: right; color: var(--primary); font-family: 'Orbitron'; font-size: 0.7rem;">
+            ONLINE_STREAMING
+        </div>
+    </div>
+
+    <audio id="audio-engine" loop>
+        <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="btn-musica" onclick="toggleMusica()">
-        <span id="icone-musica">🔈</span>
-    </button>
-
-    <main id="exposicao">
-        <header>
-            <h1>Um Ano de Nós</h1>
-            <p style="color: var(--ouro)">Curadoria por Vitor</p>
-        </header>
-
-        <div class="moldura" onclick="focar(this)">
-            <img src="foto1.jpeg" alt="Foto 1">
-            <div class="legenda">Nossa primeira memória</div>
-        </div>
-
-        <div class="moldura" onclick="focar(this)">
-            <img src="foto2.jpeg" alt="Foto 2">
-            <div class="legenda">Seu sorriso favorito</div>
-        </div>
-
-        <div class="moldura" onclick="focar(this)">
-            <img src="foto3.jpeg" alt="Foto 3">
-            <div class="legenda">Um dia inesquecível</div>
-        </div>
-
-        </main>
-
     <script>
-        const audio = document.getElementById('musica-tema');
-        const icone = document.getElementById('icone-musica');
+        // Efeito Fade-In ao rolar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
 
-        function toggleMusica() {
+        document.querySelectorAll('.moldura').forEach(m => observer.observe(m));
+
+        // Lógica do Player
+        const audio = document.getElementById('audio-engine');
+        const playBtn = document.getElementById('master-play');
+        const progress = document.getElementById('progress-inner');
+
+        playBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
-                icone.innerText = '🔊';
+                playBtn.innerText = '⏸';
             } else {
                 audio.pause();
-                icone.innerText = '🔈';
+                playBtn.innerText = '▶';
             }
-        }
+        });
 
-        function focar(el) {
-            if (el.style.transform === 'scale(1.1)') {
-                el.style.transform = 'scale(1)';
-            } else {
-                el.style.transform = 'scale(1.1)';
-            }
-        }
+        audio.ontimeupdate = () => {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = pct + '%';
+        };
     </script>
 </body>
 </html>
