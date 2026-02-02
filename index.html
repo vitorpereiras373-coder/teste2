@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preview: Nossa Galeria</title>
+    <title>Exposição: Nosso Amor</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -18,43 +18,68 @@
             font-family: 'Playfair Display', serif;
             margin: 0;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* TRAVA DESATIVADA PARA PREVIEW */
-        #hall-entrada { display: none; }
+        /* Header da Galeria */
+        header {
+            text-align: center;
+            padding: 100px 20px;
+            background: white;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
 
+        header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .curadoria {
+            color: var(--ouro);
+            font-style: italic;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        /* Container Principal */
         #exposicao {
-            display: block;
-            opacity: 1;
-            padding: 80px 20px;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
+            padding-bottom: 100px;
         }
 
-        header { text-align: center; margin-bottom: 100px; }
-        header h1 { font-size: 3rem; font-weight: 300; letter-spacing: 5px; text-transform: uppercase; }
-        .curadoria { color: var(--ouro); font-style: italic; letter-spacing: 2px; }
-
+        /* Sistema de Molduras */
         .moldura {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
             padding: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             border: 1px solid #ddd;
-            max-width: 600px;
-            margin: 80px auto;
-            cursor: pointer; /* Indica que é clicável */
+            max-width: 550px;
+            margin: 100px auto;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s;
+            position: relative;
         }
 
         .moldura img {
             width: 100%;
             height: auto;
             display: block;
-            filter: grayscale(20%);
-            transition: all 0.6s ease;
+            filter: grayscale(15%);
+            transition: filter 0.5s ease;
         }
 
-        .moldura:hover img { filter: grayscale(0%); transform: scale(1.02); }
+        .moldura:hover {
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .moldura:hover img {
+            filter: grayscale(0%);
+        }
 
         .legenda {
             margin-top: 20px;
@@ -63,13 +88,56 @@
             text-align: right;
         }
 
-        .legenda p { margin: 0; font-size: 1.1rem; }
-        .legenda span { color: var(--ouro); font-size: 0.9rem; text-transform: uppercase; }
+        .legenda p { margin: 0; font-size: 1.2rem; color: #333; }
+        .legenda span { color: var(--ouro); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        footer { text-align: center; padding: 100px 0; color: #aaa; font-size: 0.8rem; }
+        /* Botão de Áudio (Guia da Galeria) */
+        #btn-musica {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: var(--ouro);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #btn-musica:active { transform: scale(0.9); }
+
+        footer {
+            text-align: center;
+            padding: 50px 0;
+            color: #aaa;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* Responsividade para Celular */
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .moldura { margin: 50px 15px; }
+        }
     </style>
 </head>
 <body>
+
+    <audio id="musica-tema" loop>
+        <source src="assets/musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+    </audio>
+
+    <button id="btn-musica" onclick="toggleMusica()" title="Ouvir Guia da Galeria">
+        <span id="icone-musica">🔈</span>
+    </button>
 
     <main id="exposicao">
         <header>
@@ -77,44 +145,73 @@
             <p class="curadoria">Curadoria por Vitor</p>
         </header>
 
-        <div class="moldura">
-            <img src="https://via.placeholder.com/600x400" alt="Obra 1">
+        <div class="moldura" onclick="focarObra(this)">
+            <img src="assets/foto1.jpg" alt="Momento 1">
             <div class="legenda">
                 <p>"Onde nossos caminhos se cruzaram"</p>
                 <span>Fevereiro, 2025</span>
             </div>
         </div>
 
-        <div class="moldura">
-            <img src="https://via.placeholder.com/600x800" alt="Obra 2">
+        <div class="moldura" onclick="focarObra(this)">
+            <img src="assets/foto2.jpg" alt="Momento 2">
             <div class="legenda">
-                <p>"O primeiro registro de um sorriso bobo"</p>
-                <span>Março, 2025</span>
+                <p>"A primeira vez que o mundo parou"</p>
+                <span>Abril, 2025</span>
+            </div>
+        </div>
+
+        <div class="moldura" onclick="focarObra(this)">
+            <img src="assets/foto3.jpg" alt="Momento 3">
+            <div class="legenda">
+                <p>"Apenas o começo da nossa história"</p>
+                <span>Janeiro, 2026</span>
             </div>
         </div>
 
         <footer>
             <p>&copy; 2026 - Galeria Particular de Vitor & Maria Eduarda</p>
+            <p>Feito com carinho para o dia 12/02.</p>
         </footer>
     </main>
 
     <script>
-        const molduras = document.querySelectorAll('.moldura');
+        // Lógica do Áudio
+        const audio = document.getElementById('musica-tema');
+        const btn = document.getElementById('btn-musica');
+        const icone = document.getElementById('icone-musica');
 
-        molduras.forEach(moldura => {
-            moldura.addEventListener('click', () => {
-                // Remove o destaque das outras
+        function toggleMusica() {
+            if (audio.paused) {
+                audio.play();
+                icone.innerText = '🔊';
+                btn.style.background = '#fff';
+            } else {
+                audio.pause();
+                icone.innerText = '🔈';
+                btn.style.background = 'var(--ouro)';
+            }
+        }
+
+        // Lógica de Interação da Galeria
+        function focarObra(elemento) {
+            const molduras = document.querySelectorAll('.moldura');
+            
+            // Se a moldura já estiver focada, ela volta ao normal
+            if (elemento.style.transform === 'scale(1.1)') {
+                elemento.style.transform = 'scale(1)';
+                elemento.style.zIndex = '1';
+            } else {
+                // Reseta todas as outras
                 molduras.forEach(m => {
-                    if(m !== moldura) {
-                        m.style.transform = 'scale(0.95)';
-                        m.style.zIndex = '1';
-                    }
+                    m.style.transform = 'scale(1)';
+                    m.style.zIndex = '1';
                 });
-                // Dá destaque à clicada
-                moldura.style.transform = 'scale(1.08)';
-                moldura.style.zIndex = '100';
-            });
-        });
+                // Foca na clicada
+                elemento.style.transform = 'scale(1.1)';
+                elemento.style.zIndex = '100';
+            }
+        }
     </script>
 </body>
 </html>
