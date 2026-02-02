@@ -3,110 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exposição: Nosso Amor</title>
+    <title>Galeria Particular</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
             --ouro: #c5a059;
-            --preto-galeria: #1a1a1a;
-            --bege-parede: #f5f5f5;
+            --preto: #1a1a1a;
+            --fundo: #f5f5f5;
         }
 
         body {
-            background-color: var(--bege-parede);
-            color: var(--preto-galeria);
+            background-color: var(--fundo);
+            color: var(--preto);
             font-family: 'Playfair Display', serif;
             margin: 0;
-            overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
         header {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             background: white;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
-        .curadoria {
-            color: var(--ouro);
-            font-style: italic;
-            letter-spacing: 2px;
-            margin-top: 10px;
-        }
-
-        #exposicao {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding-bottom: 100px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .moldura {
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s;
             background: white;
             padding: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             border: 1px solid #ddd;
-            max-width: 500px;
-            margin: 60px auto;
+            max-width: 90%;
+            width: 450px;
+            margin: 40px auto;
             cursor: pointer;
-            position: relative;
+            transition: transform 0.4s;
         }
 
         .moldura img {
             width: 100%;
             height: auto;
             display: block;
-            filter: grayscale(10%);
-            transition: filter 0.5s ease;
         }
-
-        .moldura:hover img { filter: grayscale(0%); }
 
         .legenda {
             margin-top: 15px;
-            padding-top: 10px;
-            border-top: 0.5px solid #eee;
             text-align: right;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            font-style: italic;
         }
-
-        .legenda p { margin: 0; font-size: 1.1rem; color: #333; }
-        .legenda span { color: var(--ouro); font-size: 0.8rem; text-transform: uppercase; }
 
         #btn-musica {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 20px;
+            right: 20px;
             z-index: 1000;
             background: var(--ouro);
             border: none;
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-
-        footer { text-align: center; padding: 50px 0; color: #aaa; font-size: 0.8rem; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
     <audio id="musica-tema" loop>
-        <source src="assets/11 - Campari.mp3" type="audio/mpeg">
+        <source src="11 - Campari.mp3" type="audio/mpeg">
     </audio>
 
     <button id="btn-musica" onclick="toggleMusica()">
@@ -116,60 +81,45 @@
     <main id="exposicao">
         <header>
             <h1>Um Ano de Nós</h1>
-            <p class="curadoria">Curadoria por Vitor</p>
+            <p style="color: var(--ouro)">Curadoria por Vitor</p>
         </header>
 
-        <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto1.jpeg" alt="Obra 1">
-            <div class="legenda"><p>"Nossa primeira memória"</p><span>Foto 01</span></div>
+        <div class="moldura" onclick="focar(this)">
+            <img src="foto1.jpeg" alt="Foto 1">
+            <div class="legenda">Nossa primeira memória</div>
         </div>
 
-        <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto2.jpeg" alt="Obra 2">
-            <div class="legenda"><p>"Um sorriso que ilumina tudo"</p><span>Foto 02</span></div>
+        <div class="moldura" onclick="focar(this)">
+            <img src="foto2.jpeg" alt="Foto 2">
+            <div class="legenda">Seu sorriso favorito</div>
         </div>
 
-        <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto3.jpeg" alt="Obra 3">
-            <div class="legenda"><p>"Momentos inesquecíveis"</p><span>Foto 03</span></div>
+        <div class="moldura" onclick="focar(this)">
+            <img src="foto3.jpeg" alt="Foto 3">
+            <div class="legenda">Um dia inesquecível</div>
         </div>
 
-        <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto4.jpeg" alt="Obra 4">
-            <div class="legenda"><p>"A paz que você me traz"</p><span>Foto 04</span></div>
-        </div>
-
-        <footer>
-            <p>&copy; 2026 - Galeria Particular de Vitor & Maria Eduarda</p>
-        </footer>
-    </main>
+        </main>
 
     <script>
         const audio = document.getElementById('musica-tema');
-        const btn = document.getElementById('btn-musica');
         const icone = document.getElementById('icone-musica');
 
         function toggleMusica() {
             if (audio.paused) {
                 audio.play();
                 icone.innerText = '🔊';
-                btn.style.background = '#fff';
             } else {
                 audio.pause();
                 icone.innerText = '🔈';
-                btn.style.background = 'var(--ouro)';
             }
         }
 
-        function focarObra(elemento) {
-            const molduras = document.querySelectorAll('.moldura');
-            if (elemento.style.transform === 'scale(1.1)') {
-                elemento.style.transform = 'scale(1)';
-                elemento.style.zIndex = '1';
+        function focar(el) {
+            if (el.style.transform === 'scale(1.1)') {
+                el.style.transform = 'scale(1)';
             } else {
-                molduras.forEach(m => { m.style.transform = 'scale(1)'; m.style.zIndex = '1'; });
-                elemento.style.transform = 'scale(1.1)';
-                elemento.style.zIndex = '100';
+                el.style.transform = 'scale(1.1)';
             }
         }
     </script>
