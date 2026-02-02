@@ -21,19 +21,18 @@
             scroll-behavior: smooth;
         }
 
-        /* Header da Galeria */
         header {
             text-align: center;
-            padding: 100px 20px;
+            padding: 80px 20px;
             background: white;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
         header h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 300;
-            letter-spacing: 8px;
+            letter-spacing: 5px;
             text-transform: uppercase;
             margin: 0;
         }
@@ -45,23 +44,21 @@
             margin-top: 10px;
         }
 
-        /* Container Principal */
         #exposicao {
             max-width: 1000px;
             margin: 0 auto;
             padding-bottom: 100px;
         }
 
-        /* Sistema de Molduras */
         .moldura {
-            background: white;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border: 1px solid #ddd;
-            max-width: 550px;
-            margin: 100px auto;
-            cursor: pointer;
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s;
+            background: white;
+            padding: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            border: 1px solid #ddd;
+            max-width: 500px;
+            margin: 60px auto;
+            cursor: pointer;
             position: relative;
         }
 
@@ -69,29 +66,22 @@
             width: 100%;
             height: auto;
             display: block;
-            filter: grayscale(15%);
+            filter: grayscale(10%);
             transition: filter 0.5s ease;
         }
 
-        .moldura:hover {
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-        }
-
-        .moldura:hover img {
-            filter: grayscale(0%);
-        }
+        .moldura:hover img { filter: grayscale(0%); }
 
         .legenda {
-            margin-top: 20px;
-            padding-top: 15px;
+            margin-top: 15px;
+            padding-top: 10px;
             border-top: 0.5px solid #eee;
             text-align: right;
         }
 
-        .legenda p { margin: 0; font-size: 1.2rem; color: #333; }
-        .legenda span { color: var(--ouro); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .legenda p { margin: 0; font-size: 1.1rem; color: #333; }
+        .legenda span { color: var(--ouro); font-size: 0.8rem; text-transform: uppercase; }
 
-        /* Botão de Áudio (Guia da Galeria) */
         #btn-musica {
             position: fixed;
             bottom: 30px;
@@ -108,34 +98,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
         }
 
-        #btn-musica:active { transform: scale(0.9); }
-
-        footer {
-            text-align: center;
-            padding: 50px 0;
-            color: #aaa;
-            font-size: 0.8rem;
-            border-top: 1px solid #eee;
-        }
-
-        /* Responsividade para Celular */
-        @media (max-width: 600px) {
-            header h1 { font-size: 2rem; }
-            .moldura { margin: 50px 15px; }
-        }
+        footer { text-align: center; padding: 50px 0; color: #aaa; font-size: 0.8rem; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
     <audio id="musica-tema" loop>
-        <source src="assets/musica.mp3" type="audio/mpeg">
-        Seu navegador não suporta áudio.
+        <source src="assets/11 - Campari.mp3" type="audio/mpeg">
     </audio>
 
-    <button id="btn-musica" onclick="toggleMusica()" title="Ouvir Guia da Galeria">
+    <button id="btn-musica" onclick="toggleMusica()">
         <span id="icone-musica">🔈</span>
     </button>
 
@@ -146,37 +120,31 @@
         </header>
 
         <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto1.jpg" alt="Momento 1">
-            <div class="legenda">
-                <p>"Onde nossos caminhos se cruzaram"</p>
-                <span>Fevereiro, 2025</span>
-            </div>
+            <img src="assets/foto1.jpeg" alt="Obra 1">
+            <div class="legenda"><p>"Nossa primeira memória"</p><span>Foto 01</span></div>
         </div>
 
         <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto2.jpg" alt="Momento 2">
-            <div class="legenda">
-                <p>"A primeira vez que o mundo parou"</p>
-                <span>Abril, 2025</span>
-            </div>
+            <img src="assets/foto2.jpeg" alt="Obra 2">
+            <div class="legenda"><p>"Um sorriso que ilumina tudo"</p><span>Foto 02</span></div>
         </div>
 
         <div class="moldura" onclick="focarObra(this)">
-            <img src="assets/foto3.jpg" alt="Momento 3">
-            <div class="legenda">
-                <p>"Apenas o começo da nossa história"</p>
-                <span>Janeiro, 2026</span>
-            </div>
+            <img src="assets/foto3.jpeg" alt="Obra 3">
+            <div class="legenda"><p>"Momentos inesquecíveis"</p><span>Foto 03</span></div>
+        </div>
+
+        <div class="moldura" onclick="focarObra(this)">
+            <img src="assets/foto4.jpeg" alt="Obra 4">
+            <div class="legenda"><p>"A paz que você me traz"</p><span>Foto 04</span></div>
         </div>
 
         <footer>
             <p>&copy; 2026 - Galeria Particular de Vitor & Maria Eduarda</p>
-            <p>Feito com carinho para o dia 12/02.</p>
         </footer>
     </main>
 
     <script>
-        // Lógica do Áudio
         const audio = document.getElementById('musica-tema');
         const btn = document.getElementById('btn-musica');
         const icone = document.getElementById('icone-musica');
@@ -193,21 +161,13 @@
             }
         }
 
-        // Lógica de Interação da Galeria
         function focarObra(elemento) {
             const molduras = document.querySelectorAll('.moldura');
-            
-            // Se a moldura já estiver focada, ela volta ao normal
             if (elemento.style.transform === 'scale(1.1)') {
                 elemento.style.transform = 'scale(1)';
                 elemento.style.zIndex = '1';
             } else {
-                // Reseta todas as outras
-                molduras.forEach(m => {
-                    m.style.transform = 'scale(1)';
-                    m.style.zIndex = '1';
-                });
-                // Foca na clicada
+                molduras.forEach(m => { m.style.transform = 'scale(1)'; m.style.zIndex = '1'; });
                 elemento.style.transform = 'scale(1.1)';
                 elemento.style.zIndex = '100';
             }
