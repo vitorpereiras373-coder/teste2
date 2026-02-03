@@ -1,1 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Playlist: Maria Eduarda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0; background: #121212; color: white;
+            font-family: 'Montserrat', sans-serif;
+            padding-bottom: 120px;
+            overflow-x: hidden;
+        }
 
+        header {
+            padding: 80px 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, #2a1b3d, #121212);
+        }
+
+        /* GALERIA RESTAURADA */
+        .galeria {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #181818;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        /* INTERAÇÃO DE PASSAR O MOUSE */
+        .card:hover {
+            background: #282828;
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 5px;
+            display: block;
+            pointer-events: none;
+        }
+
+        /* PLAYER BAR (FIXO NO PC) */
+        .player-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 95px;
+            background: #000; border-top: 1px solid #282828;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000;
+        }
+
+        .container {
+            width: 100%; max-width: 1200px;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 25px;
+        }
+
+        .info { display: flex; align-items: center; gap: 15px; width: 30%; }
+        .info img { width: 56px; height: 56px; border-radius: 4px; object-fit: cover; }
+        .info h4 { margin: 0; font-size: 14px; }
+        .info p { margin: 0; font-size: 12px; color: #b3b3b3; }
+
+        /* CONTROLES E PLAY CENTRALIZADO */
+        .controls {
+            display: flex; flex-direction: column; align-items: center;
+            width: 40%; gap: 12px;
+        }
+
+        .play-btn {
+            width: 42px; height: 42px; background: white; border-radius: 50%;
+            border: none; cursor: pointer;
+            display: grid; place-items: center; /* ALINHAMENTO GEOMÉTRICO */
+            padding: 0; transition: transform 0.2s ease;
+        }
+        .play-btn:hover { transform: scale(1.1); }
+        .play-btn svg { width: 22px; height: 22px; fill: black; }
+
+        .progress-bg {
+            width: 100%; max-width: 450px; height: 4px;
+            background: #4f4f4f; border-radius: 2px;
+            position: relative;
+        }
+        #progress-fill {
+            height: 100%; background: #1DB954; width: 0%;
+            border-radius: 2px; transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nossa História</h1>
+        <p style="color: #b3b3b3;">PLAYLIST EXCLUSIVA • VITOR & MARIA</p>
+    </header>
+
+    <div class="galeria">
+        <div class="card"><img src="foto1.jpeg"></div>
+        <div class="card"><img src="foto2.jpeg"></div>
+        <div class="card"><img src="foto3.jpeg"></div>
+        <div class="card"><img src="foto4.jpeg"></div>
+        <div class="card"><img src="foto5.jpeg"></div>
+        <div class="card"><img src="foto6.jpeg"></div>
+        <div class="card"><img src="foto7.jpeg"></div>
+        <div class="card"><img src="foto8.jpeg"></div>
+        <div class="card"><img src="foto9.jpeg"></div>
+        <div class="card"><img src="foto10.jpeg"></div>
+        <div class="card"><img src="foto11.jpeg"></div>
+    </div>
+
+    <div class="player-bar">
+        <div class="container">
+            <div class="info">
+                <img src="capa_album.jpeg" onerror="this.src='capa_album.jfif'">
+                <div>
+                    <h4>Campari</h4>
+                    <p>Vitor</p>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="play-btn" id="btnPlay">
+                    <svg id="playIcon" viewBox="0 0 24 24">
+                        <path id="pathIcon" d="M8 5v14l11-7z"></path>
+                    </svg>
+                </button>
+                <div class="progress-bg">
+                    <div id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div style="width: 30%; text-align: right; color: #1DB954; font-size: 22px;">♥</div>
+        </div>
+    </div>
+
+    <audio id="musica" preload="auto">
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('musica');
+        const btn = document.getElementById('btnPlay');
+        const path = document.getElementById('pathIcon');
+        const fill = document.getElementById('progress-fill');
+
+        // Tenta pré-carregar
+        audio.load();
+
+        btn.onclick = () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    path.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); // Pause
+                }).catch(err => {
+                    console.error("Erro:", err);
+                    alert("Aguarde um segundo, a música está carregando...");
+                });
+            } else {
+                audio.pause();
+                path.setAttribute('d', 'M8 5v14l11-7z'); // Play
+            }
+        };
+
+        audio.ontimeupdate = () => {
+            if (audio.duration) {
+                const pct = (audio.currentTime / audio.duration) * 100;
+                fill.style.width = pct + '%';
+            }
+        };
+    </script>
+</body>
+</html>
