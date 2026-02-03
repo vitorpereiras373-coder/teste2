@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nossa História</title>
+  <title>Feliz Aniversário Maria Eduarda</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
@@ -108,16 +108,29 @@
       text-align:center;
     }
 
-    /* OVERLAY (tela cheia) */
+    /* OVERLAY (animação suave) */
     #overlay{
       position:fixed;
       inset:0;
       background:rgba(0,0,0,0.92);
-      display:none;
-      align-items:center;
-      justify-content:center;
       z-index:9999;
       padding:18px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition: opacity .25s ease, visibility 0s linear .25s;
+    }
+
+    #overlay.show{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transition: opacity .25s ease, visibility 0s linear 0s;
     }
 
     #overlayBox{
@@ -126,6 +139,13 @@
       flex-direction:column;
       gap:14px;
       align-items:center;
+
+      transform: scale(0.92);
+      transition: transform .25s ease;
+    }
+
+    #overlay.show #overlayBox{
+      transform: scale(1);
     }
 
     #overlayImg{
@@ -166,7 +186,7 @@
 
 <body>
   <header>
-    <h1>Nossa História</h1>
+    <h1>Feliz Aniversário Maria Eduarda</h1>
     <p class="subtitle">Toque nas fotos para ler as mensagens</p>
   </header>
 
@@ -218,7 +238,7 @@
       cards.forEach(card => observer.observe(card));
     }
 
-    // overlay (tocar abre)
+    // overlay (animação)
     const overlay = document.getElementById('overlay');
     const overlayImg = document.getElementById('overlayImg');
     const overlayText = document.getElementById('overlayText');
@@ -227,16 +247,16 @@
     function openOverlay(imgSrc, text){
       overlayImg.src = imgSrc;
       overlayText.textContent = text || '';
-      overlay.style.display = 'flex';
+      overlay.classList.add('show');
       overlay.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     }
 
     function closeOverlay(){
-      overlay.style.display = 'none';
+      overlay.classList.remove('show');
       overlay.setAttribute('aria-hidden', 'true');
-      overlayImg.src = '';
       document.body.style.overflow = '';
+      setTimeout(() => { overlayImg.src = ''; }, 260);
     }
 
     cards.forEach(card => {
