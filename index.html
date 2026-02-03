@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Playlist: Maria Eduarda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Maria Eduarda</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -20,7 +20,6 @@
             background: #121212;
             transition: background 0.8s ease;
             overflow-x: hidden;
-            -webkit-tap-highlight-color: transparent;
         }
 
         header {
@@ -36,7 +35,7 @@
         .subtitle { color: var(--sp-grey); font-size: 0.8rem; letter-spacing: 1px; margin-top: 5px; }
 
         .galeria {
-            padding: 20px;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             gap: 40px;
@@ -58,7 +57,10 @@
             overflow: hidden;
         }
 
-        .card.reveal { opacity: 1; transform: translateY(0); }
+        .card.reveal { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
 
         /* EFEITO HOVER/TOUCH */
         .card:hover, .card.active {
@@ -105,67 +107,8 @@
             transform: scale(1.05);
         }
 
-        /* Player bar igual ao original */
-        .player-bar {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            height: 90px;
-            background: #000;
-            border-top: 1px solid #282828;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            box-sizing: border-box;
-            z-index: 9999;
-        }
-
-        .track-info { display: flex; align-items: center; width: 40%; }
-        .album-art { width: 55px; height: 55px; border-radius: 4px; margin-right: 12px; object-fit: cover; }
-        .track-text h4 { margin: 0; font-size: 0.85rem; }
-        .track-text p { margin: 0; font-size: 0.7rem; color: var(--sp-grey); }
-
-        .controls {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-        }
-
-        .play-btn {
-            width: 35px;
-            height: 35px;
-            background: white;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 4px;
-            background: #4f4f4f;
-            border-radius: 2px;
-            position: relative;
-        }
-
-        #progress-fill {
-            height: 100%;
-            background: white;
-            width: 0%;
-            border-radius: 2px;
-        }
-
         @media (max-width: 600px) {
-            .track-info { width: 70%; }
-            .controls { position: absolute; top: 15px; right: 20px; width: auto; }
-            .progress-container { position: absolute; top: -1px; left: 0; width: 100vw; height: 2px; }
+            .galeria { padding: 20px; }
         }
     </style>
 </head>
@@ -177,64 +120,21 @@
     </header>
 
     <div class="galeria">
-        <div class="card" data-frase="Frase 1"><img src="foto1.jpeg" alt="Foto 1"></div>
-        <div class="card" data-frase="Frase 2"><img src="foto2.jpeg" alt="Foto 2"></div>
-        <div class="card" data-frase="Frase 3"><img src="foto3.jpeg" alt="Foto 3"></div>
-        <div class="card" data-frase="Frase 4"><img src="foto4.jpeg" alt="Foto 4"></div>
-        <div class="card" data-frase="Frase 5"><img src="foto5.jpeg" alt="Foto 5"></div>
-        <div class="card" data-frase="E que daqui uns anos sejamos nós dois."><img src="foto6.jpeg" alt="Foto 6"></div>
-        <div class="card" data-frase="Frase 7"><img src="foto7.jpeg" alt="Foto 7"></div>
-        <div class="card" data-frase="Frase 8"><img src="foto8.jpeg" alt="Foto 8"></div>
-        <div class="card" data-frase="Frase 9"><img src="foto9.jpeg" alt="Foto 9"></div>
-        <div class="card" data-frase="Frase 10"><img src="foto10.jpeg" alt="Foto 10"></div>
-        <div class="card" data-frase="Frase 11"><img src="foto11.jpeg" alt="Foto 11"></div>
+        <div class="card" data-frase="Frase 1"><img src="foto1.jpg" alt="Foto 1"></div>
+        <div class="card" data-frase="Frase 2"><img src="foto2.jpg" alt="Foto 2"></div>
+        <div class="card" data-frase="Frase 3"><img src="foto3.jpg" alt="Foto 3"></div>
+        <div class="card" data-frase="Frase 4"><img src="foto4.jpg" alt="Foto 4"></div>
+        <div class="card" data-frase="Frase 5"><img src="foto5.jpg" alt="Foto 5"></div>
+        <div class="card" data-frase="E que daqui uns anos sejamos nós dois."><img src="foto6.jpg" alt="Foto 6"></div>
+        <div class="card" data-frase="Frase 7"><img src="foto7.jpg" alt="Foto 7"></div>
+        <div class="card" data-frase="Frase 8"><img src="foto8.jpg" alt="Foto 8"></div>
+        <div class="card" data-frase="Frase 9"><img src="foto9.jpg" alt="Foto 9"></div>
+        <div class="card" data-frase="Frase 10"><img src="foto10.jpg" alt="Foto 10"></div>
+        <div class="card" data-frase="Frase 11"><img src="foto11.jpg" alt="Foto 11"></div>
     </div>
-
-    <div class="player-bar">
-        <div class="track-info">
-            <img src="capa_album.jpeg" class="album-art" onerror="this.src='foto1.jpeg'">
-            <div class="track-text">
-                <h4>Campari</h4>
-                <p>Vitor</p>
-            </div>
-            <span style="color: var(--sp-green); margin-left: 10px;">♥</span>
-        </div>
-
-        <div class="controls">
-            <button class="play-btn" id="playBtn">▶</button>
-            <div class="progress-container">
-                <div id="progress-fill"></div>
-            </div>
-        </div>
-    </div>
-
-    <audio id="musica" loop>
-        <source src="musica.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
-        const audio = document.getElementById('musica');
-        const playBtn = document.getElementById('playBtn');
-        const fill = document.getElementById('progress-fill');
-        const cards = document.querySelectorAll('.card');
-
-        // Player igual ao original
-        playBtn.addEventListener('click', function() {
-            if (audio.paused) {
-                audio.play();
-                this.innerText = 'II';
-            } else {
-                audio.pause();
-                this.innerText = '▶';
-            }
-        });
-
-        audio.addEventListener('timeupdate', () => {
-            const pct = (audio.currentTime / audio.duration) * 100;
-            fill.style.width = pct + '%';
-        });
-
-        // Degradê dinâmico no scroll (mantido)
+        // Degradê dinâmico no scroll
         window.addEventListener('scroll', () => {
             const scrollPct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             const r = Math.floor(18 + (scrollPct * 50));
@@ -243,19 +143,18 @@
             document.body.style.background = `rgb(${r}, ${g}, ${b})`;
         });
 
-        // Revelar cards (mantido)
+        // Revelar cards
         const obs = new IntersectionObserver((entries) => {
             entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('reveal'); });
         }, { threshold: 0.1 });
-        cards.forEach(c => obs.observe(c));
+        document.querySelectorAll('.card').forEach(c => obs.observe(c));
 
-        // NOVO: Efeito hover/touch nas fotos
+        // Efeito hover/touch
+        const cards = document.querySelectorAll('.card');
         cards.forEach(card => {
-            // Desktop hover
             card.addEventListener('mouseenter', () => card.classList.add('active'));
             card.addEventListener('mouseleave', () => card.classList.remove('active'));
             
-            // Mobile touch
             card.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 card.classList.add('active');
