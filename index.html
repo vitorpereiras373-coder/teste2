@@ -8,26 +8,46 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    :root { --green:#1DB954; }
+    :root{
+      --romantic: #ff2f5d;
+      --tint: 0.18; /* força do vermelho no fundo (0 a 1) */
+    }
 
     body{
       margin:0; padding:0;
       color:#fff;
       font-family:'Montserrat',sans-serif;
-      background:#121212;
-      transition: background .8s ease;
+
+      /* FOTO DE FUNDO */
+      background: #121212 url("fundo.jpeg") center/cover no-repeat fixed;
       overflow-x:hidden;
+    }
+
+    /* Camada escura + vermelho por cima da foto (controlada por --tint) */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 0%,
+          rgba(255,47,93,var(--tint)),
+          rgba(0,0,0,0.80)
+        );
+      transition: background .2s linear;
     }
 
     header{
       padding:56px 18px 10px;
       text-align:center;
+      position:relative;
+      z-index:1;
     }
 
     h1{
       margin:0;
       font-size:2.2rem;
-      background: linear-gradient(45deg, #fff, var(--green));
+      background: linear-gradient(45deg, #fff, var(--romantic));
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       background-clip:text;
@@ -35,12 +55,12 @@
 
     .subtitle{
       margin:10px 0 0;
-      color:#b3b3b3;
+      color:#d0d0d0;
       font-size:1rem;
       letter-spacing:1px;
     }
 
-    /* FEED */
+    /* FEED (uma embaixo da outra) */
     .feed{
       max-width:520px;
       margin:0 auto;
@@ -48,10 +68,13 @@
       display:flex;
       flex-direction:column;
       gap:22px;
+      position:relative;
+      z-index:1;
     }
 
     .card{
-      background:rgba(255,255,255,0.06);
+      background:rgba(0,0,0,0.42);
+      border:1px solid rgba(255,255,255,0.10);
       border-radius:14px;
       padding:12px;
       cursor:pointer;
@@ -61,12 +84,13 @@
       opacity:0;
       transform: translateY(22px);
       transition: opacity .55s ease, transform .55s ease, box-shadow .25s ease, background .25s ease;
+      backdrop-filter: blur(2px);
     }
     .card.reveal{ opacity:1; transform: translateY(0); }
 
     .card:hover{
-      background:rgba(255,255,255,0.12);
-      box-shadow:0 18px 40px rgba(0,0,0,0.55);
+      background:rgba(0,0,0,0.55);
+      box-shadow:0 18px 40px rgba(0,0,0,0.60);
     }
 
     .card img{
@@ -79,11 +103,12 @@
     .hint{
       margin-top:10px;
       font-size:.9rem;
-      color:#9aa0a6;
+      color:#e0e0e0;
+      opacity:0.85;
       text-align:center;
     }
 
-    /* OVERLAY */
+    /* OVERLAY (tela cheia) */
     #overlay{
       position:fixed;
       inset:0;
@@ -113,7 +138,7 @@
     }
 
     #overlayText{
-      color:var(--green);
+      color:var(--romantic);
       font-weight:700;
       text-align:center;
       font-size:1.15rem;
@@ -134,6 +159,7 @@
       cursor:pointer;
     }
 
+    /* Se não suportar IntersectionObserver, não esconda */
     .no-io .card{ opacity:1; transform:none; }
   </style>
 </head>
@@ -169,14 +195,12 @@
   </div>
 
   <script>
-    // degradê no scroll
+    // Vermelho aumenta conforme scroll (controla --tint)
     window.addEventListener('scroll', () => {
       const denom = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-      const p = window.scrollY / denom;
-      const r = Math.floor(18 + (p * 50));
-      const g = Math.floor(18 + (p * 20));
-      const b = Math.floor(18 + (p * 80));
-      document.body.style.background = `rgb(${r}, ${g}, ${b})`;
+      const p = window.scrollY / denom;               // 0..1
+      const tint = (0.12 + p * 0.55).toFixed(3);      // 0.12..0.67
+      document.documentElement.style.setProperty('--tint', tint);
     });
 
     const cards = document.querySelectorAll('.card');
