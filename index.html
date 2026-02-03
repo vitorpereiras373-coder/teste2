@@ -2,128 +2,114 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Maria Eduarda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Playlist: Maria Eduarda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --spotify-black: #121212;
-            --spotify-light: #282828;
-            --accent: #1DB954;
+            --sp-black: #121212;
+            --sp-grey: #b3b3b3;
+            --sp-green: #1DB954;
         }
 
         body {
             margin: 0;
+            padding: 0;
             color: white;
             font-family: 'Montserrat', sans-serif;
-            /* Degradê dinâmico que muda com o scroll */
-            background: linear-gradient(180deg, #1e1e2e 0%, #2a1b3d 33%, #44318d 66%, #8265a7 100%);
-            background-attachment: fixed;
-            transition: background 0.5s ease;
-            padding-bottom: 110px;
+            background: #121212;
+            /* Degradê que será controlado pelo JS */
+            transition: background 0.8s ease;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         header {
-            height: 60vh;
+            height: 40vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+            background: linear-gradient(to bottom, rgba(255,117,160,0.2), transparent);
         }
 
-        header h1 { font-size: 3rem; margin: 0; letter-spacing: -1px; }
-        header p { color: #b3b3b3; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
+        h1 { font-size: 2.2rem; margin: 0; }
+        .subtitle { color: var(--sp-grey); font-size: 0.8rem; letter-spacing: 1px; margin-top: 5px; }
 
         .galeria {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
             max-width: 500px;
             margin: 0 auto;
-            padding: 20px;
         }
 
         .card {
+            width: 100%;
             background: rgba(255,255,255,0.05);
             border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 60px;
-            transition: transform 0.3s ease, background 0.3s ease;
+            padding: 12px;
+            box-sizing: border-box;
             opacity: 0;
             transform: translateY(30px);
+            transition: all 0.6s ease-out;
         }
 
         .card.reveal { opacity: 1; transform: translateY(0); }
 
-        .card:hover { background: rgba(255,255,255,0.1); }
-
         .card img {
             width: 100%;
+            height: auto;
             border-radius: 4px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Player Identico ao Spotify */
-        .spotify-player {
+        /* Spotify Player Footer */
+        .player-bar {
             position: fixed;
             bottom: 0;
-            left: 0;
-            right: 0;
+            width: 100%;
             height: 90px;
             background: #000;
             border-top: 1px solid #282828;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
-            z-index: 1000;
+            padding: 0 15px;
+            box-sizing: border-box;
+            z-index: 9999;
         }
 
-        .track-info { display: flex; align-items: center; width: 30%; }
-        
-        .album-art {
-            width: 56px;
-            height: 56px;
-            border-radius: 4px;
-            margin-right: 14px;
-            object-fit: cover;
-        }
+        .track-info { display: flex; align-items: center; width: 40%; }
+        .album-art { width: 55px; height: 55px; border-radius: 4px; margin-right: 12px; object-fit: cover; }
+        .track-text h4 { margin: 0; font-size: 0.85rem; }
+        .track-text p { margin: 0; font-size: 0.7rem; color: var(--sp-grey); }
 
-        .track-details h4 { margin: 0; font-size: 0.9rem; font-weight: 400; }
-        .track-details p { margin: 0; font-size: 0.75rem; color: #b3b3b3; }
-
-        .player-controls {
+        .controls {
             flex: 1;
-            max-width: 40%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: 400px;
         }
 
-        .main-buttons { display: flex; align-items: center; gap: 24px; margin-bottom: 8px; }
-
-        .play-pause-btn {
-            width: 32px;
-            height: 32px;
+        .play-btn {
+            width: 35px;
+            height: 35px;
             background: white;
             border-radius: 50%;
             border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             cursor: pointer;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .progress-container {
             width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.7rem;
-            color: #b3b3b3;
-        }
-
-        .progress-bar {
-            flex: 1;
             height: 4px;
             background: #4f4f4f;
             border-radius: 2px;
@@ -138,18 +124,17 @@
         }
 
         @media (max-width: 600px) {
-            .track-info { width: 60%; }
-            .player-controls { position: absolute; top: -5px; left: 0; width: 100%; max-width: 100%; }
-            .progress-container { padding: 0; }
-            .main-buttons { margin-top: 15px; }
+            .track-info { width: 70%; }
+            .controls { position: absolute; top: 15px; right: 20px; width: auto; }
+            .progress-container { position: absolute; top: -1px; left: 0; width: 100vw; height: 2px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <p>Playlist</p>
         <h1>Para Maria Eduarda</h1>
+        <div class="subtitle">PLAYLIST • 11 MÚSICAS</div>
     </header>
 
     <div class="galeria">
@@ -166,81 +151,63 @@
         <div class="card"><img src="foto11.jpeg"></div>
     </div>
 
-    <div class="spotify-player">
+    <div class="player-bar">
         <div class="track-info">
-            <img src="capa_album.jpeg" class="album-art" alt="Capa">
-            <div class="track-details">
+            <img src="capa_album.jpeg" class="album-art" onerror="this.src='foto1.jpeg'">
+            <div class="track-text">
                 <h4>Campari</h4>
                 <p>Vitor</p>
             </div>
-            <span style="color: var(--accent); margin-left: 15px; font-size: 1.2rem;">♥</span>
+            <span style="color: var(--sp-green); margin-left: 10px;">♥</span>
         </div>
 
-        <div class="player-controls">
-            <div class="main-buttons">
-                <button class="play-pause-btn" id="btnPlay">
-                    <span id="playIcon" style="color: black; font-size: 1rem;">▶</span>
-                </button>
-            </div>
+        <div class="controls">
+            <button class="play-btn" id="playBtn">▶</button>
             <div class="progress-container">
-                <span id="currentTime">0:00</span>
-                <div class="progress-bar">
-                    <div id="progress-fill"></div>
-                </div>
-                <span id="duration">0:00</span>
+                <div id="progress-fill"></div>
             </div>
         </div>
-
-        <div style="width: 30%;"></div>
     </div>
 
-    <audio id="audio" loop>
+    <audio id="musica" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const audio = document.getElementById('audio');
-        const btnPlay = document.getElementById('btnPlay');
-        const playIcon = document.getElementById('playIcon');
-        const progressFill = document.getElementById('progress-fill');
+        const audio = document.getElementById('musica');
+        const playBtn = document.getElementById('playBtn');
+        const fill = document.getElementById('progress-fill');
 
-        // Botão Play/Pause
-        btnPlay.addEventListener('click', () => {
+        // Play/Pause funcional no celular
+        playBtn.addEventListener('click', function() {
             if (audio.paused) {
                 audio.play();
-                playIcon.innerText = 'II';
+                this.innerText = 'II';
             } else {
                 audio.pause();
-                playIcon.innerText = '▶';
+                this.innerText = '▶';
             }
         });
 
-        // Atualizar barra e tempo
         audio.addEventListener('timeupdate', () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressFill.style.width = progress + '%';
-            
-            let curMins = Math.floor(audio.currentTime / 60);
-            let curSecs = Math.floor(audio.currentTime - curMins * 60);
-            if(curSecs < 10) curSecs = "0" + curSecs;
-            document.getElementById('currentTime').innerText = curMins + ":" + curSecs;
+            const pct = (audio.currentTime / audio.duration) * 100;
+            fill.style.width = pct + '%';
         });
 
-        audio.addEventListener('loadedmetadata', () => {
-            let durMins = Math.floor(audio.duration / 60);
-            let durSecs = Math.floor(audio.duration - durMins * 60);
-            if(durSecs < 10) durSecs = "0" + durSecs;
-            document.getElementById('duration').innerText = durMins + ":" + durSecs;
+        // Efeito de Degradê Dinâmico no Scroll
+        window.addEventListener('scroll', () => {
+            const scrollPct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const r = Math.floor(18 + (scrollPct * 50)); // De quase preto para um roxo/azul
+            const g = Math.floor(18 + (scrollPct * 20));
+            const b = Math.floor(18 + (scrollPct * 80));
+            document.body.style.background = `rgb(${r}, ${g}, ${b})`;
         });
 
-        // Efeito Reveal das fotos
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('reveal');
-            });
+        // Revelar fotos
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('reveal'); });
         }, { threshold: 0.1 });
-
-        document.querySelectorAll('.card').forEach(c => observer.observe(c));
+        document.querySelectorAll('.card').forEach(c => obs.observe(c));
     </script>
 </body>
 </html>
