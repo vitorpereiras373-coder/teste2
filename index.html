@@ -4,28 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nossa História</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
-    :root { --green: #1DB954; }
+    :root { --green:#1DB954; }
 
     body{
       margin:0; padding:0;
       color:#fff;
       font-family:'Montserrat',sans-serif;
       background:#121212;
-      transition: background 0.8s ease;
+      transition: background .8s ease;
       overflow-x:hidden;
     }
 
     header{
-      padding:60px 20px;
+      padding:56px 18px 10px;
       text-align:center;
     }
 
     h1{
       margin:0;
-      font-size:2.4rem;
+      font-size:2.2rem;
       background: linear-gradient(45deg, #fff, var(--green));
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
@@ -33,92 +34,108 @@
     }
 
     .subtitle{
-      margin-top:10px;
+      margin:10px 0 0;
       color:#b3b3b3;
-      letter-spacing:1.5px;
       font-size:1rem;
+      letter-spacing:1px;
     }
 
-    .galeria{
-      display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-      gap:22px;
-      padding:24px;
-      max-width:1200px;
+    /* FEED (uma embaixo da outra) */
+    .feed{
+      max-width:520px;
       margin:0 auto;
+      padding:18px 14px 60px;
+      display:flex;
+      flex-direction:column;
+      gap:22px;
     }
 
     .card{
       background:rgba(255,255,255,0.06);
-      border-radius:12px;
+      border-radius:14px;
       padding:12px;
       cursor:pointer;
       position:relative;
       overflow:hidden;
 
-      /* Começa escondido, mas agora o JS funciona */
+      /* reveal */
       opacity:0;
-      transform: translateY(26px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out, box-shadow 0.3s ease, background 0.3s ease;
+      transform: translateY(22px);
+      transition: opacity .55s ease, transform .55s ease, box-shadow .25s ease, background .25s ease;
     }
+    .card.reveal{ opacity:1; transform: translateY(0); }
 
-    .card.reveal{
-      opacity:1;
-      transform: translateY(0);
+    .card:hover{
+      background:rgba(255,255,255,0.12);
+      box-shadow:0 18px 40px rgba(0,0,0,0.55);
     }
 
     .card img{
       width:100%;
-      height:280px;
-      object-fit:cover;
-      border-radius:8px;
+      height:auto;           /* estilo feed */
+      border-radius:10px;
       display:block;
-      transition: transform 0.25s ease;
     }
 
-    .card:hover, .card.active{
-      background:rgba(255,255,255,0.14);
-      transform: scale(1.02) translateY(-6px);
-      box-shadow:0 25px 50px rgba(0,0,0,0.65);
+    .hint{
+      margin-top:10px;
+      font-size:.9rem;
+      color:#9aa0a6;
+      text-align:center;
     }
 
-    .card:hover img, .card.active img{
-      transform: scale(1.06);
-    }
-
-    /* Mensagem por cima */
-    .card::before{
-      content: attr(data-frase);
-      position:absolute;
+    /* OVERLAY (zoom + frase) */
+    #overlay{
+      position:fixed;
       inset:0;
-      background:rgba(0,0,0,0.90);
-      color: var(--green);
-      font-weight:700;
-      font-size:1.15rem;
-      padding:22px;
-
-      display:flex;
+      background:rgba(0,0,0,0.92);
+      display:none;
       align-items:center;
       justify-content:center;
+      z-index:9999;
+      padding:18px;
+    }
+
+    #overlayBox{
+      width:min(900px, 100%);
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:center;
+    }
+
+    #overlayImg{
+      width:100%;
+      max-height:72vh;
+      object-fit:contain;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.15);
+      background:#111;
+    }
+
+    #overlayText{
+      color:var(--green);
+      font-weight:700;
       text-align:center;
+      font-size:1.25rem;
       line-height:1.35;
-
-      opacity:0;
-      transform: translateY(100%);
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      pointer-events:none;
+      max-width:90%;
     }
 
-    .card:hover::before, .card.active::before{
-      opacity:1;
-      transform: translateY(0);
+    #closeBtn{
+      position:fixed;
+      top:14px; right:14px;
+      width:44px; height:44px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(0,0,0,0.55);
+      color:#fff;
+      font-size:22px;
+      cursor:pointer;
     }
 
-    /* Se o browser não suportar IntersectionObserver, não esconda */
-    .no-io .card{
-      opacity:1;
-      transform:none;
-    }
+    /* Se não suportar IntersectionObserver, não esconder */
+    .no-io .card{ opacity:1; transform:none; }
   </style>
 </head>
 
@@ -128,7 +145,7 @@
     <p class="subtitle">Toque nas fotos para ler as mensagens</p>
   </header>
 
-  <div class="galeria">
+  <main class="feed">
     <div class="card" data-frase="Frase 1"><img src="foto1.jpeg" alt="Foto 1"></div>
     <div class="card" data-frase="Frase 2"><img src="foto2.jpeg" alt="Foto 2"></div>
     <div class="card" data-frase="Frase 3"><img src="foto3.jpeg" alt="Foto 3"></div>
@@ -140,22 +157,33 @@
     <div class="card" data-frase="Frase 9"><img src="foto9.jpeg" alt="Foto 9"></div>
     <div class="card" data-frase="Frase 10"><img src="foto10.jpeg" alt="Foto 10"></div>
     <div class="card" data-frase="Frase 11"><img src="foto11.jpeg" alt="Foto 11"></div>
+
+    <div class="hint">Dica: clique/toque em uma foto para abrir em tela cheia</div>
+  </main>
+
+  <!-- Overlay -->
+  <div id="overlay" aria-hidden="true">
+    <button id="closeBtn" aria-label="Fechar">×</button>
+    <div id="overlayBox">
+      <img id="overlayImg" alt="">
+      <div id="overlayText"></div>
+    </div>
   </div>
 
   <script>
-    // Degradê no scroll
+    // degradê no scroll
     window.addEventListener('scroll', () => {
       const denom = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-      const scrollPct = window.scrollY / denom;
-      const r = Math.floor(18 + (scrollPct * 50));
-      const g = Math.floor(18 + (scrollPct * 20));
-      const b = Math.floor(18 + (scrollPct * 80));
+      const p = window.scrollY / denom;
+      const r = Math.floor(18 + (p * 50));
+      const g = Math.floor(18 + (p * 20));
+      const b = Math.floor(18 + (p * 80));
       document.body.style.background = `rgb(${r}, ${g}, ${b})`;
     });
 
     const cards = document.querySelectorAll('.card');
 
-    // Reveal (CORRETO)
+    // reveal (sem bug)
     if (!('IntersectionObserver' in window)) {
       document.body.classList.add('no-io');
     } else {
@@ -168,19 +196,42 @@
       cards.forEach(card => observer.observe(card));
     }
 
-    // Hover/touch
+    // overlay click (tocar abre)
+    const overlay = document.getElementById('overlay');
+    const overlayImg = document.getElementById('overlayImg');
+    const overlayText = document.getElementById('overlayText');
+    const closeBtn = document.getElementById('closeBtn');
+
+    function openOverlay(imgSrc, text){
+      overlayImg.src = imgSrc;
+      overlayText.textContent = text || '';
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay(){
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlayImg.src = '';
+      document.body.style.overflow = '';
+    }
+
     cards.forEach(card => {
-      card.addEventListener('mouseenter', () => card.classList.add('active'));
-      card.addEventListener('mouseleave', () => card.classList.remove('active'));
-
-      card.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        card.classList.add('active');
-      }, { passive: false });
-
-      card.addEventListener('touchend', () => {
-        setTimeout(() => card.classList.remove('active'), 2500);
+      card.addEventListener('click', () => {
+        const img = card.querySelector('img');
+        openOverlay(img.src, card.getAttribute('data-frase'));
       });
+    });
+
+    overlay.addEventListener('click', (e) => {
+      // fecha clicando fora da imagem
+      if (e.target === overlay) closeOverlay();
+    });
+    closeBtn.addEventListener('click', closeOverlay);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeOverlay();
     });
   </script>
 </body>
