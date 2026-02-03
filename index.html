@@ -9,43 +9,67 @@
         body {
             margin: 0; padding: 0; background: #121212; color: white;
             font-family: 'Montserrat', sans-serif;
-            padding-bottom: calc(110px + env(safe-area-inset-bottom));
             transition: background 0.5s ease;
             overflow-x: hidden;
+            /* Removido o padding-bottom do player */
         }
-        header { padding: 60px 20px; text-align: center; background: linear-gradient(to bottom, #2a1b3d, #121212); }
-        .galeria { display: flex; flex-direction: column; gap: 30px; padding: 20px; max-width: 450px; margin: 0 auto; }
-        .card { background: #282828; padding: 12px; border-radius: 8px; opacity: 0; transform: translateY(20px); transition: 0.6s ease; }
-        .card.reveal { opacity: 1; transform: translateY(0); }
-        .card img { width: 100%; border-radius: 4px; display: block; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
 
-        /* PLAYER ESTILO SPOTIFY */
-        .spotify-player {
-            position: fixed; bottom: 0; left: 0; width: 100%; background: #000;
-            border-top: 1px solid #282828; padding: 12px 15px;
-            padding-bottom: calc(12px + env(safe-area-inset-bottom));
-            display: flex; align-items: center; justify-content: space-between;
-            z-index: 10000; box-sizing: border-box;
+        header { 
+            padding: 80px 20px; 
+            text-align: center; 
+            background: linear-gradient(to bottom, #2a1b3d, #121212); 
         }
-        .track-info { display: flex; align-items: center; gap: 12px; width: 65%; }
-        .album-art { width: 50px; height: 50px; border-radius: 4px; object-fit: cover; }
-        .track-text h4 { margin: 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .track-text p { margin: 0; font-size: 0.75rem; color: #b3b3b3; }
-        
-        .play-btn {
-            width: 42px; height: 42px; background: white; border-radius: 50%;
-            border: none; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; flex-shrink: 0;
+
+        h1 { font-size: 2.5rem; margin: 0; }
+
+        /* GALERIA AJUSTADA PARA PC (GRID) */
+        .galeria { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            padding: 40px 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
         }
-        .progress-container { position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: #4f4f4f; }
-        #progress-bar { height: 100%; background: #1DB954; width: 0%; transition: width 0.1s linear; }
+
+        .card { 
+            background: #282828; 
+            padding: 12px; 
+            border-radius: 8px; 
+            opacity: 0; 
+            transform: translateY(20px); 
+            transition: 0.6s ease; 
+        }
+
+        /* EFEITO DE INTERAÇÃO (HOVER) */
+        .card:hover {
+            transform: scale(1.03);
+            background: #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .card.reveal { opacity: 1; transform: translateY(0); }
+
+        .card img { 
+            width: 100%; 
+            border-radius: 4px; 
+            display: block; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+        }
+
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            color: #b3b3b3;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Nossa História</h1>
-        <p style="color: #b3b3b3; letter-spacing: 1px;">PLAYLIST PARA MARIA</p>
+        <p style="color: #b3b3b3; letter-spacing: 1px;">PARA MARIA EDUARDA</p>
     </header>
 
     <div class="galeria">
@@ -62,66 +86,24 @@
         <div class="card"><img src="foto11.jpeg"></div>
     </div>
 
-    <div class="spotify-player">
-        <div class="progress-container"><div id="progress-bar"></div></div>
-        <div class="track-info">
-            <img id="capa" src="capa_album.jpeg" class="album-art">
-            <div class="track-text">
-                <h4>Campari</h4>
-                <p>Vitor</p>
-            </div>
-            <span style="color: #1DB954; font-size: 1.2rem; margin-left: 5px;">♥</span>
-        </div>
-        <button class="play-btn" id="playBtn">
-            <span id="playIcon" style="color: black; font-size: 1.4rem; margin-left: 2px;">▶</span>
-        </button>
-    </div>
-
-    <audio id="musica" loop playsinline>
-        <source id="audioSource" src="musica.mp3" type="audio/mpeg">
-    </audio>
+    <footer>
+        Com carinho, Vitor.
+    </footer>
 
     <script>
-        const audio = document.getElementById('musica');
-        const playBtn = document.getElementById('playBtn');
-        const playIcon = document.getElementById('playIcon');
-        const progressBar = document.getElementById('progress-bar');
-
-        // Garante que o navegador busque a versão nova dos arquivos
-        window.addEventListener('DOMContentLoaded', () => {
-            const version = "?v=" + new Date().getTime();
-            document.getElementById('audioSource').src += version;
-            document.getElementById('capa').src += version;
-            audio.load();
-            
-            document.querySelectorAll('.card img').forEach(img => {
-                img.src += version;
-            });
-        });
-
-        playBtn.onclick = () => {
-            if (audio.paused) {
-                audio.play();
-                playIcon.innerHTML = '<span style="margin-left:-2px">II</span>';
-            } else {
-                audio.pause();
-                playIcon.innerText = '▶';
-            }
-        };
-
-        audio.ontimeupdate = () => {
-            const pct = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = pct + '%';
-        };
-
+        // Mantive o efeito de mudança de cor no scroll que você tinha
         window.onscroll = () => {
             const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
             document.body.style.background = `rgb(${18 + pct * 40}, 18, ${18 + pct * 80})`;
         };
 
+        // Mantive a animação de revelação das fotos
         const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('reveal'); });
+            entries.forEach(e => { 
+                if(e.isIntersecting) e.target.classList.add('reveal'); 
+            });
         }, { threshold: 0.1 });
+
         document.querySelectorAll('.card').forEach(c => obs.observe(c));
     </script>
 </body>
