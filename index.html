@@ -4,121 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Maria Eduarda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --accent: #ff75a0;
             --spotify-green: #1DB954;
-            --glass: rgba(255, 255, 255, 0.1);
-            --gradient: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-gradient: linear-gradient(180deg, #050505 0%, #121212 100%);
+            --glass: rgba(255, 255, 255, 0.08);
         }
 
         body {
-            background: var(--gradient);
-            background-attachment: fixed;
+            background: var(--bg-gradient);
             color: white;
             font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding-bottom: 120px;
-            overflow-x: hidden;
+            padding-bottom: 120px; /* Espaço para o player */
         }
 
         header {
+            padding: 60px 20px;
             text-align: center;
-            padding: 80px 20px;
         }
 
         header h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            margin: 0;
-            text-shadow: 0 0 20px rgba(255, 117, 160, 0.5);
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 10px;
         }
 
-        .gallery {
+        /* Grade de Fotos - Responsiva para Celular */
+        .galeria {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 50px;
-            padding: 20px;
+            gap: 40px;
+            padding: 0 20px;
         }
 
-        /* Moldura Estilo Polaroid Futurista */
         .card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 400px;
+            border-radius: 12px;
+            padding: 12px;
+            width: 100%;
+            max-width: 380px;
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease-out;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(40px);
+            transition: all 0.9s ease-out;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .card.reveal {
+        .card.show {
             opacity: 1;
             transform: translateY(0);
         }
 
         .card img {
             width: 100%;
-            border-radius: 10px;
-            display: block;
-            transition: transform 0.5s ease;
+            border-radius: 8px;
+            transition: transform 0.4s ease;
         }
 
         .card:hover img {
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
 
-        .caption {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 300;
-            letter-spacing: 1px;
-            color: #ddd;
-        }
-
-        /* Player Estilo Spotify Premium */
-        .spotify-bar {
+        /* Player Estilo Spotify Identico */
+        .spotify-footer {
             position: fixed;
             bottom: 0;
+            left: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 15px 20px;
+            background: #000;
+            border-top: 1px solid #282828;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 9999;
+            box-sizing: border-box;
+        }
+
+        .player-main {
             display: flex;
             align-items: center;
+            width: 100%;
             justify-content: space-between;
-            border-top: 1px solid #333;
-            box-sizing: border-box;
-            z-index: 1000;
         }
 
-        .song-info { display: flex; align-items: center; gap: 12px; width: 30%; }
-        .song-info img {
+        .info-musica {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 30%;
+        }
+
+        .capa-album {
             width: 50px;
             height: 50px;
-            border-radius: 5px;
-            animation: rotate 10s linear infinite;
-            animation-play-state: paused;
+            border-radius: 4px;
+            background: #282828;
         }
-        
-        .playing img { animation-play-state: running; }
 
-        .song-details h4 { margin: 0; font-size: 0.9rem; }
-        .song-details p { margin: 0; font-size: 0.75rem; color: #b3b3b3; }
+        .texto-musica h4 { margin: 0; font-size: 0.9rem; }
+        .texto-musica p { margin: 0; font-size: 0.75rem; color: #b3b3b3; }
 
-        .player-controls { flex: 1; display: flex; flex-direction: column; align-items: center; }
-        
-        .play-circle {
+        .controles {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-play {
             background: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -127,32 +128,40 @@
             transition: transform 0.2s;
         }
 
-        .play-circle:hover { transform: scale(1.1); }
-        .play-circle svg { width: 20px; fill: black; }
+        .btn-play:hover { transform: scale(1.1); }
 
-        .progress-container {
+        /* Barra de Progresso Fina */
+        .barra-progresso-total {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             height: 4px;
             background: #4f4f4f;
-            margin-top: 12px;
+            margin-top: 10px;
             border-radius: 2px;
             cursor: pointer;
         }
 
-        .progress-bar {
+        .progresso-atual {
             height: 100%;
-            background: var(--accent);
+            background: white;
             width: 0%;
             border-radius: 2px;
-            position: relative;
+            transition: width 0.1s linear;
         }
 
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .progresso-atual:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            display: none;
+        }
 
         @media (max-width: 600px) {
-            header h1 { font-size: 2.5rem; }
-            .song-info { width: 50%; }
+            .info-musica { width: 60%; }
         }
     </style>
 </head>
@@ -160,89 +169,81 @@
 
     <header>
         <h1>Nossa História</h1>
-        <p>12 de Fevereiro • Maria Eduarda</p>
+        <p style="color: #b3b3b3; font-weight: 300;">1 ano ao teu lado</p>
     </header>
 
-    <div class="gallery" id="gallery">
-        <div class="card"><img src="foto1.jpeg"><div class="caption">O começo de tudo 🤍</div></div>
-        <div class="card"><img src="foto2.jpeg"><div class="caption">Seu sorriso favorito</div></div>
-        <div class="card"><img src="foto3.jpeg"><div class="caption">Melhor lugar do mundo</div></div>
-        <div class="card"><img src="foto4.jpeg"><div class="caption">Nossa paz</div></div>
-        <div class="card"><img src="foto5.jpeg"><div class="caption">Cada detalhe seu</div></div>
-        <div class="card"><img src="foto6.jpeg"><div class="caption">Sempre nós</div></div>
-        <div class="card"><img src="foto7.jpeg"><div class="caption">Amo você</div></div>
-        <div class="card"><img src="foto8.jpeg"><div class="caption">Nossos planos</div></div>
-        <div class="card"><img src="foto9.jpeg"><div class="caption">Meu porto seguro</div></div>
-        <div class="card"><img src="foto10.jpeg"><div class="caption">Pra sempre</div></div>
-        <div class="card"><img src="foto11.jpeg"><div class="caption">O melhor está por vir ✨</div></div>
+    <div class="galeria">
+        <div class="card"><img src="foto1.jpeg"></div>
+        <div class="card"><img src="foto2.jpeg"></div>
+        <div class="card"><img src="foto3.jpeg"></div>
+        <div class="card"><img src="foto4.jpeg"></div>
+        <div class="card"><img src="foto5.jpeg"></div>
+        <div class="card"><img src="foto6.jpeg"></div>
+        <div class="card"><img src="foto7.jpeg"></div>
+        <div class="card"><img src="foto8.jpeg"></div>
+        <div class="card"><img src="foto9.jpeg"></div>
+        <div class="card"><img src="foto10.jpeg"></div>
+        <div class="card"><img src="foto11.jpeg"></div>
     </div>
 
-    <div class="spotify-bar" id="spotify-bar">
-        <div class="song-info" id="song-info">
-            <img src="foto1.jpeg" alt="Capa">
-            <div class="song-details">
-                <h4>11 - Campari</h4>
-                <p>Vitor</p>
+    <div class="spotify-footer">
+        <div class="player-main">
+            <div class="info-musica">
+                <img src="foto1.jpeg" class="capa-album">
+                <div class="texto-musica">
+                    <h4>11 - Campari</h4>
+                    <p>Vitor</p>
+                </div>
             </div>
-        </div>
 
-        <div class="player-controls">
-            <button class="play-circle" id="playBtn">
-                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar" id="progressBar"></div>
+            <div class="controles">
+                <button class="btn-play" id="btnPlay">
+                    <span id="iconePlay" style="color: black; font-size: 1.2rem;">▶</span>
+                </button>
+                <div class="barra-progresso-total" id="barraTotal">
+                    <div class="progresso-atual" id="barraProgresso"></div>
+                </div>
             </div>
+            
+            <div style="width: 30%;"></div>
         </div>
-        <div style="width: 30%;"></div>
     </div>
 
-    <audio id="mainAudio" loop>
+    <audio id="musica" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const audio = document.getElementById('mainAudio');
-        const playBtn = document.getElementById('playBtn');
-        const playIcon = document.getElementById('playIcon');
-        const progressBar = document.getElementById('progressBar');
-        const progressContainer = document.getElementById('progressContainer');
-        const songInfo = document.getElementById('song-info');
+        const audio = document.getElementById('musica');
+        const btnPlay = document.getElementById('btnPlay');
+        const iconePlay = document.getElementById('iconePlay');
+        const barraProgresso = document.getElementById('barraProgresso');
 
-        // Play/Pause
-        playBtn.addEventListener('click', () => {
+        // Toggle Play/Pause
+        btnPlay.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play().catch(e => alert("Erro ao tocar música. Verifique se o arquivo musica.mp3 está na raiz!"));
-                playIcon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
-                songInfo.classList.add('playing');
+                audio.play();
+                iconePlay.innerText = '⏸';
             } else {
                 audio.pause();
-                playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-                songInfo.classList.remove('playing');
+                iconePlay.innerText = '▶';
             }
         });
 
-        // Barra de progresso
+        // Atualiza Barra
         audio.addEventListener('timeupdate', () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = progress + '%';
+            const perc = (audio.currentTime / audio.duration) * 100;
+            barraProgresso.style.width = perc + '%';
         });
 
-        progressContainer.addEventListener('click', (e) => {
-            const width = progressContainer.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audio.duration;
-            audio.currentTime = (clickX / width) * duration;
-        });
-
-        // Efeito Reveal (Fade-in)
+        // Efeito de aparecer as fotos ao rolar
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('reveal');
+                if (entry.isIntersecting) entry.target.classList.add('show');
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.card').forEach(card => observer.observe(card));
+        document.querySelectorAll('.card').forEach(c => observer.observe(c));
     </script>
 </body>
 </html>
