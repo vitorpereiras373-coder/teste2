@@ -2,203 +2,100 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Maria Eduarda</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0; padding: 0; background: #121212; color: white;
             font-family: 'Montserrat', sans-serif;
-            transition: background 0.5s ease;
             overflow-x: hidden;
         }
 
-        header { 
-            padding: 80px 20px; 
-            text-align: center; 
-            background: linear-gradient(to bottom, #2a1b3d, #121212); 
-        }
+        header { padding: 80px 20px; text-align: center; background: linear-gradient(to bottom, #2a1b3d, #121212); }
+        h1 { font-size: 2.5rem; margin: 0; }
 
+        /* GALERIA EM GRADE */
         .galeria { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 40px; 
-            padding: 40px 20px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; padding: 40px; max-width: 1200px; margin: 0 auto; 
         }
 
-        /* ESTRUTURA DO CARD 3D */
-        .card {
-            background-color: transparent;
-            width: 100%;
-            height: 400px; /* Altura fixa para o efeito de giro */
-            perspective: 1000px; /* Efeito de profundidade */
-            opacity: 0;
-            transform: translateY(20px);
-            transition: 0.6s ease;
+        .card { 
+            background: #282828; padding: 10px; border-radius: 8px; 
+            cursor: pointer; transition: transform 0.3s ease;
+            opacity: 0; transform: translateY(20px);
         }
-
         .card.reveal { opacity: 1; transform: translateY(0); }
+        .card:hover { transform: scale(1.05); background: #333; }
+        .card img { width: 100%; border-radius: 4px; display: block; }
 
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-            cursor: pointer;
+        /* OVERLAY (O CLOSE DA FOTO) */
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            display: none; /* Escondido por padrão */
+            flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10000; cursor: zoom-out;
+            animation: fadeIn 0.3s ease;
         }
 
-        /* GIRA O CARD AO PASSAR O MOUSE OU CLICAR */
-        .card:hover .card-inner, .card.active .card-inner {
-            transform: rotateY(180deg);
+        #overlay img {
+            max-width: 90%; max-height: 70vh;
+            border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            transform: scale(0.8); animation: zoomIn 0.3s forwards;
         }
 
-        .card-front, .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        #overlay-text {
+            margin-top: 25px; font-size: 1.4rem; text-align: center;
+            max-width: 80%; line-height: 1.5; color: #1DB954; /* Verde Spotify pra dar destaque */
+            font-weight: 700;
         }
 
-        /* FRENTE: A FOTO */
-        .card-front { background-color: #282828; }
-        .card-front img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { transform: scale(0.8); } to { transform: scale(1); } }
 
-        /* VERSO: A FRASE */
-        .card-back {
-            background: linear-gradient(135deg, #1DB954, #191414);
-            color: white;
-            transform: rotateY(180deg);
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .card-back p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            font-weight: 400;
-        }
-
-        footer { padding: 60px; text-align: center; color: #b3b3b3; }
+        footer { padding: 40px; text-align: center; color: #4f4f4f; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Nossa História</h1>
-        <p style="color: #b3b3b3; letter-spacing: 1px;">CLIQUE OU PASSE O MOUSE NAS FOTOS</p>
+        <p style="color: #b3b3b3;">Clique nas fotos para ver os detalhes</p>
     </header>
 
     <div class="galeria">
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto1.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 1 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto2.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 2 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto3.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 3 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto4.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 4 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto5.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 5 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto6.jpeg"></div>
-                <div class="card-back"><p>E que seja nós dois um dia</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto7.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 7 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto8.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 8 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto9.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 9 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto10.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 10 AQUI</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-inner">
-                <div class="card-front"><img src="foto11.jpeg"></div>
-                <div class="card-back"><p>FRASE DA FOTO 11 AQUI</p></div>
-            </div>
-        </div>
+        <div class="card" data-frase="Frase da primeira foto"><img src="foto1.jpeg"></div>
+        <div class="card" data-frase="Frase da segunda foto"><img src="foto2.jpeg"></div>
+        <div class="card" data-frase="Frase da terceira foto"><img src="foto3.jpeg"></div>
+        <div class="card" data-frase="Frase da quarta foto"><img src="foto4.jpeg"></div>
+        <div class="card" data-frase="Frase da quinta foto"><img src="foto5.jpeg"></div>
+        
+        <div class="card" data-frase="E que daqui uns anos sejamos nós dois."><img src="foto6.jpeg"></div>
+        
+        <div class="card" data-frase="Frase da sétima foto"><img src="foto7.jpeg"></div>
+        <div class="card" data-frase="Frase da oitava foto"><img src="foto8.jpeg"></div>
+        <div class="card" data-frase="Frase da nona foto"><img src="foto9.jpeg"></div>
+        <div class="card" data-frase="Frase da décima foto"><img src="foto10.jpeg"></div>
+        <div class="card" data-frase="Frase da décima primeira foto"><img src="foto11.jpeg"></div>
     </div>
 
-    <footer>Com carinho, Vitor.</footer>
+    <div id="overlay" onclick="closeZoom()">
+        <img id="overlay-img" src="">
+        <div id="overlay-text"></div>
+    </div>
+
+    <footer>Com amor, Vitor</footer>
 
     <script>
-        // Efeito de revelação no Scroll
-        const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('reveal'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.card').forEach(c => obs.observe(c));
+        const overlay = document.getElementById('overlay');
+        const overlayImg = document.getElementById('overlay-img');
+        const overlayText = document.getElementById('overlay-text');
 
-        // Permite "desvirar" ao tocar no celular também
+        // Função para abrir o Close
         document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('click', function() {
-                this.classList.toggle('active');
-            });
-        });
-
-        // Mudança de fundo suave
-        window.onscroll = () => {
-            const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
-            document.body.style.background = `rgb(${18 + pct * 30}, 20, ${25 + pct * 50})`;
-        };
-    </script>
-</body>
-</html>
+            card.addEventListener('click', () => {
+                const imgSrc = card.querySelector('img').src;
+                const frase = card.getAttribute('data-frase');
