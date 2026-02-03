@@ -40,7 +40,7 @@
       letter-spacing:1px;
     }
 
-    /* FEED (uma embaixo da outra) */
+    /* FEED */
     .feed{
       max-width:520px;
       margin:0 auto;
@@ -58,7 +58,6 @@
       position:relative;
       overflow:hidden;
 
-      /* reveal */
       opacity:0;
       transform: translateY(22px);
       transition: opacity .55s ease, transform .55s ease, box-shadow .25s ease, background .25s ease;
@@ -72,7 +71,7 @@
 
     .card img{
       width:100%;
-      height:auto;           /* estilo feed */
+      height:auto;
       border-radius:10px;
       display:block;
     }
@@ -84,7 +83,7 @@
       text-align:center;
     }
 
-    /* OVERLAY (zoom + frase) */
+    /* OVERLAY */
     #overlay{
       position:fixed;
       inset:0;
@@ -117,9 +116,10 @@
       color:var(--green);
       font-weight:700;
       text-align:center;
-      font-size:1.25rem;
+      font-size:1.15rem;
       line-height:1.35;
-      max-width:90%;
+      max-width:92%;
+      white-space: pre-wrap;
     }
 
     #closeBtn{
@@ -134,7 +134,6 @@
       cursor:pointer;
     }
 
-    /* Se não suportar IntersectionObserver, não esconder */
     .no-io .card{ opacity:1; transform:none; }
   </style>
 </head>
@@ -146,26 +145,25 @@
   </header>
 
   <main class="feed">
-    <div class="card" data-frase="Eu te amo minha garota"><img src="foto1.jpeg" alt="Foto 1"></div>
-    <div class="card" data-frase="Frase 2"><img src="foto2.jpeg" alt="Foto 2"></div>
-    <div class="card" data-frase="Frase 3"><img src="foto3.jpeg" alt="Foto 3"></div>
-    <div class="card" data-frase="Frase 4"><img src="foto4.jpeg" alt="Foto 4"></div>
-    <div class="card" data-frase="Frase 5"><img src="foto5.jpeg" alt="Foto 5"></div>
-    <div class="card" data-frase="E que daqui uns anos sejamos nós dois."><img src="foto6.jpeg" alt="Foto 6"></div>
-    <div class="card" data-frase="Frase 7"><img src="foto7.jpeg" alt="Foto 7"></div>
-    <div class="card" data-frase="Frase 8"><img src="foto8.jpeg" alt="Foto 8"></div>
-    <div class="card" data-frase="Frase 9"><img src="foto9.jpeg" alt="Foto 9"></div>
-    <div class="card" data-frase="Frase 10"><img src="foto10.jpeg" alt="Foto 10"></div>
-    <div class="card" data-frase="Frase 11"><img src="foto11.jpeg" alt="Foto 11"></div>
+    <div class="card" data-frase="Feliz aniversário, meu amor, antes de tudo, queria vir apresentar um pouquinho da nossa história, e também os nossos sonhos, sejam os realizados, ou os que ainda serão."><img src="foto1.jpeg" alt="Foto 1"></div>
+    <div class="card" data-frase="Aqui, foi um dos melhores momentos que tive em minha vida, um lugar calmo, lindo e o maior de tudo, você estava lá, tão calma e meiga como a brisa em que nos cercava naquela praia."><img src="foto2.jpeg" alt="Foto 2"></div>
+    <div class="card" data-frase="Foto sorridente? Por quê não? Já que dês que estavamos juntos aprendi a ser mais fotogênico, e o principal, ser fotogênico..."><img src="foto3.jpeg" alt="Foto 3"></div>
+    <div class="card" data-frase="Um pouquinho da nossa versão jovem... Que aliás, não posso deixar de esquecer essa sua fase de delineados coloridos (uma gracinha de menina linda)."><img src="foto4.jpeg" alt="Foto 4"></div>
+    <div class="card" data-frase="Mençoes honrosas a sua belaza, aqui eu estou apenas como item de cenário, pois a beleza ficou escoada apenas a ti."><img src="foto5.jpeg" alt="Foto 5"></div>
+    <div class="card" data-frase="Nesta imagem, é onde meu coração mais se esquenta, pois... Não há desejo maior à mim, do que ser pai de uma linda menina (Stormi, Violet, Agnes ou os diversos nomes que estamos vendo, ou inventando)."><img src="foto6.jpeg" alt="Foto 6"></div>
+    <div class="card" data-frase="Já que não fomos namorados com 8 anos (anos perdidos de amor), eu voltei no tempo com uma máquina do tempo que eu criei com algumas bujigangas do meu pai, e fiz ficarmos juntos dês da nossa infância. Espero que não haja problema para você..."><img src="foto7.jpeg" alt="Foto 7"></div>
+    <div class="card" data-frase="Quando voltamos de um dia de muita água e clóro (piscina na lilis)."><img src="foto8.jpeg" alt="Foto 8"></div>
+    <div class="card" data-frase="Ressaltando com todos os nits, fótons, espectros e feixes de luzes o quão bela você é, e sempre será, sua beleza nunca se perderá, pois você foi a coisa mais bela já criada pelo divino."><img src="foto9.jpeg" alt="Foto 9"></div>
+    <div class="card" data-frase="Não podia faltar o que mais me encanta em você... Esses sorriso não são apenas demonstrações de amor ou felicidades, pra mim eles significam casa, saudades e perdição"><img src="foto10.jpeg" alt="Foto 10"></div>
+    <div class="card" data-frase="O quão frágil me tornei ao seu lado, e isso me deixa tão reconfortado, pois sei que cada situação assim, me deixa mais vivo, e o principal... Mais íntimo a você. obrigado por tudo Maria Eduarda, obrigado por ser essa benção em minha vida, e feliz aniversário, minha pequena garotinha, que Deus lhe abençõe, e que esse seja mais um de vários."><img src="foto11.jpeg" alt="Foto 11"></div>
 
     <div class="hint">Dica: clique/toque em uma foto para abrir em tela cheia</div>
   </main>
 
-  <!-- Overlay -->
   <div id="overlay" aria-hidden="true">
     <button id="closeBtn" aria-label="Fechar">×</button>
     <div id="overlayBox">
-      <img id="overlayImg" alt="">
+      <img id="overlayImg" alt="" />
       <div id="overlayText"></div>
     </div>
   </div>
@@ -183,7 +181,7 @@
 
     const cards = document.querySelectorAll('.card');
 
-    // reveal (sem bug)
+    // reveal
     if (!('IntersectionObserver' in window)) {
       document.body.classList.add('no-io');
     } else {
@@ -196,7 +194,7 @@
       cards.forEach(card => observer.observe(card));
     }
 
-    // overlay click (tocar abre)
+    // overlay (tocar abre)
     const overlay = document.getElementById('overlay');
     const overlayImg = document.getElementById('overlayImg');
     const overlayText = document.getElementById('overlayText');
@@ -225,9 +223,9 @@
     });
 
     overlay.addEventListener('click', (e) => {
-      // fecha clicando fora da imagem
       if (e.target === overlay) closeOverlay();
     });
+
     closeBtn.addEventListener('click', closeOverlay);
 
     document.addEventListener('keydown', (e) => {
