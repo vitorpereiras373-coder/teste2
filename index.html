@@ -1,415 +1,126 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Feliz Aniversário, Maria Eduarda</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>parasempre…</title>
   <style>
     :root{
-      --romantic: #ff2f5d;
-      --tint: 0.18; /* força do vermelho no fundo (0 a 1) */
+      --bg:#0b0f19;
+      --card:#121a2e;
+      --border:#223055;
+      --text:#e8eefc;
+      --muted:#aab6d6;
+      --barbg:#0a1020;
+      --grad: linear-gradient(90deg,#6a7dff,#c86bff);
     }
-
-    body{
-      margin:0; padding:0;
-      color:#fff;
-      font-family:'Montserrat',sans-serif;
-
-      /* FOTO DE FUNDO */
-      background: #121212 url("fundo.jpeg") center/cover no-repeat fixed;
-      overflow-x:hidden;
-    }
-
-    /* Camada escura + vermelho por cima da foto (controlada por --tint) */
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 50% 0%,
-          rgba(255,47,93,var(--tint)),
-          rgba(0,0,0,0.80)
-        );
-      transition: background .2s linear;
-    }
-
-    header{
-      padding:56px 18px 10px;
-      text-align:center;
-      position:relative;
-      z-index:1;
-    }
-
-    h1{
-      margin:0;
-      font-size:2.05rem;
-      background: linear-gradient(45deg, #fff, var(--romantic));
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-
-    .subtitle{
-      margin:10px 0 0;
-      color:#e3e3e3;
-      font-size:1rem;
-      letter-spacing:1px;
-      opacity:0.92;
-    }
-
-    /* FEED */
-    .feed{
-      max-width:520px;
-      margin:0 auto;
-      padding:18px 14px 140px; /* espaço pro player */
-      display:flex;
-      flex-direction:column;
-      gap:22px;
-      position:relative;
-      z-index:1;
-    }
-
-    .card{
-      background:rgba(0,0,0,0.42);
-      border:1px solid rgba(255,255,255,0.10);
-      border-radius:14px;
-      padding:12px;
-      cursor:pointer;
-      position:relative;
-      overflow:hidden;
-
-      opacity:0;
-      transform: translateY(22px);
-      transition: opacity .55s ease, transform .55s ease, box-shadow .25s ease, background .25s ease;
-      backdrop-filter: blur(2px);
-    }
-    .card.reveal{ opacity:1; transform: translateY(0); }
-
-    .card:hover{
-      background:rgba(0,0,0,0.55);
-      box-shadow:0 18px 40px rgba(0,0,0,0.60);
-    }
-
-    .card img{
-      width:100%;
-      height:auto;
-      border-radius:10px;
-      display:block;
-    }
-
-    .hint{
-      margin-top:10px;
-      font-size:.9rem;
-      color:#e0e0e0;
-      opacity:0.85;
-      text-align:center;
-    }
-
-    /* OVERLAY (animação suave) */
-    #overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,0.92);
-      z-index:9999;
-      padding:18px;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      transition: opacity .25s ease, visibility 0s linear .25s;
-    }
-
-    #overlay.show{
-      opacity:1;
-      visibility:visible;
-      pointer-events:auto;
-      transition: opacity .25s ease, visibility 0s linear 0s;
-    }
-
-    #overlayBox{
-      width:min(900px, 100%);
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-      align-items:center;
-
-      transform: scale(0.92);
-      transition: transform .25s ease;
-    }
-
-    #overlay.show #overlayBox{
-      transform: scale(1);
-    }
-
-    #overlayImg{
-      width:100%;
-      max-height:72vh;
-      object-fit:contain;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,0.15);
-      background:#111;
-    }
-
-    #overlayText{
-      color:var(--romantic);
-      font-weight:700;
-      text-align:center;
-      font-size:1.05rem;
-      line-height:1.35;
-      max-width:92%;
-      white-space: pre-wrap;
-    }
-
-    #closeBtn{
-      position:fixed;
-      top:14px; right:14px;
-      width:44px; height:44px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,0.18);
-      background:rgba(0,0,0,0.55);
-      color:#fff;
-      font-size:22px;
-      cursor:pointer;
-    }
-
-    /* PLAYER estilo Spotify */
-    .player{
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      height: 86px;
-      padding: 10px 14px;
-      box-sizing: border-box;
-      z-index: 9998;
-
-      background: rgba(0,0,0,0.72);
-      border-top: 1px solid rgba(255,255,255,0.10);
-      backdrop-filter: blur(6px);
-
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .p-left{ display:flex; align-items:center; gap:12px; min-width: 220px; }
-    .p-cover{ width:56px; height:56px; border-radius:10px; object-fit: cover; border:1px solid rgba(255,255,255,0.12); }
-    .p-meta{ display:flex; flex-direction:column; gap:4px; }
-    .p-title{ font-weight:700; font-size:0.95rem; line-height:1.1; }
-    .p-artist{ font-size:0.78rem; color:#cfcfcf; opacity:0.9; }
-
-    .p-mid{ flex:1; display:flex; flex-direction:column; align-items:center; gap:10px; max-width: 560px; }
-    .p-btn{
-      width:40px; height:40px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      background: white;
-      color: black;
-      font-weight: 800;
-    }
-
-    .p-bar{ width:100%; display:flex; align-items:center; gap:10px; }
-    .p-time{ width:44px; text-align:center; font-size:0.75rem; color:#d9d9d9; opacity:0.9; }
-
-    .p-progress{
-      flex:1;
-      height: 6px;
-      background: rgba(255,255,255,0.20);
-      border-radius: 999px;
-      overflow: hidden;
-      cursor: pointer;
-    }
-    .p-fill{
-      height:100%;
-      width: 0%;
-      .p-fill{ background: #1DB954; }
-    }
-
-    @media (max-width: 600px){
-      h1{ font-size:1.55rem; }
-      .p-left{ min-width: 150px; }
-      .p-artist{ display:none; }
-      .p-time{ width:40px; }
-    }
-
-    /* Se não suportar IntersectionObserver, não esconda */
-    .no-io .card{ opacity:1; transform:none; }
+    body{ margin:0; font-family:system-ui, Arial; background:var(--bg); color:var(--text); }
+    .wrap{ max-width:820px; margin:0 auto; padding:28px 18px; }
+    .card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; }
+    h1{ margin:0 0 8px 0; font-size:28px; }
+    p{ margin:0; }
+    .muted{ color:var(--muted); }
+    .sp{ height:14px; }
+    .bar{ height:14px; background:var(--barbg); border:1px solid var(--border); border-radius:999px; overflow:hidden; }
+    .fill{ height:100%; width:0%; background:var(--grad); transition:width .25s; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px; }
+    .pill{ display:inline-block; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:var(--barbg); }
+    #content[hidden]{ display:none; }
   </style>
 </head>
 
 <body>
-  <header>
-    <h1>Feliz Aniversário, Maria Eduarda</h1>
-    <p class="subtitle">Toque nas fotos para ler as mensagens</p>
-  </header>
+  <div class="wrap">
 
-  <main class="feed">
-    <div class="card" data-frase="Feliz aniversário, meu amor, antes de tudo, queria vir apresentar um pouquinho da nossa história, e também os nossos sonhos, sejam os realizados, ou os que ainda serão."><img src="foto1.jpeg" alt="Foto 1"></div>
-    <div class="card" data-frase="Aqui, foi um dos melhores momentos que tive em minha vida, um lugar calmo, lindo e o maior de tudo, você estava lá, tão calma e meiga como a brisa em que nos cercava naquela praia."><img src="foto2.jpeg" alt="Foto 2"></div>
-    <div class="card" data-frase="Foto sorridente? Por quê não? Já que dês que estavamos juntos aprendi a ser mais fotogênico, e o principal, ser fotogênico..."><img src="foto3.jpeg" alt="Foto 3"></div>
-    <div class="card" data-frase="Um pouquinho da nossa versão jovem... Que aliás, não posso deixar de esquecer essa sua fase de delineados coloridos (uma gracinha de menina linda)."><img src="foto4.jpeg" alt="Foto 4"></div>
-    <div class="card" data-frase="Mençoes honrosas a sua belaza, aqui eu estou apenas como item de cenário, pois a beleza ficou escoada apenas a ti."><img src="foto5.jpeg" alt="Foto 5"></div>
-    <div class="card" data-frase="Nesta imagem, é onde meu coração mais se esquenta, pois... Não há desejo maior à mim, do que ser pai de uma linda menina (Stormi, Violet, Agnes ou os diversos nomes que estamos vendo, ou inventando)."><img src="foto6.jpeg" alt="Foto 6"></div>
-    <div class="card" data-frase="Já que não fomos namorados com 8 anos (anos perdidos de amor), eu voltei no tempo com uma máquina do tempo que eu criei com algumas bujigangas do meu pai, e fiz ficarmos juntos dês da nossa infância. Espero que não haja problema para você..."><img src="foto7.jpeg" alt="Foto 7"></div>
-    <div class="card" data-frase="Quando voltamos de um dia de muita água e clóro (piscina na lilis)."><img src="foto8.jpeg" alt="Foto 8"></div>
-    <div class="card" data-frase="Ressaltando com todos os nits, fótons, espectros e feixes de luzes o quão bela você é, e sempre será, sua beleza nunca se perderá, pois você foi a coisa mais bela já criada pelo divino."><img src="foto9.jpeg" alt="Foto 9"></div>
-    <div class="card" data-frase="Não podia faltar o que mais me encanta em você... Esses sorriso não são apenas demonstrações de amor ou felicidades, pra mim eles significam casa, saudades e perdição"><img src="foto10.jpeg" alt="Foto 10"></div>
-    <div class="card" data-frase="O quão frágil me tornei ao seu lado, e isso me deixa tão reconfortado, pois sei que cada situação assim, me deixa mais vivo, e o principal... Mais íntimo a você. obrigado por tudo Maria Eduarda, obrigado por ser essa benção em minha vida, e feliz aniversário, minha pequena garotinha, que Deus lhe abençõe, e que esse seja mais um de vários."><img src="foto11.jpeg" alt="Foto 11"></div>
+    <!-- TELA BLOQUEADA -->
+    <div id="lock" class="card">
+      <h1>Falta pouco…</h1>
+      <p class="muted">Quando chegar o dia, libera automaticamente.</p>
 
-  </main>
+      <div class="sp"></div>
+      <div class="bar"><div id="fill" class="fill"></div></div>
 
-  <!-- Overlay -->
-  <div id="overlay" aria-hidden="true">
-    <button id="closeBtn" aria-label="Fechar">×</button>
-    <div id="overlayBox">
-      <img id="overlayImg" alt="" />
-      <div id="overlayText"></div>
+      <div class="row">
+        <span class="pill" id="left">Carregando…</span>
+        <span class="pill muted" id="target"></span>
+      </div>
+
+      <div class="sp"></div>
+      <p class="muted" style="line-height:1.4">
+        Se você quiser, escreve aqui um textinho curto/fofo enquanto ela espera.
+      </p>
     </div>
+
+    <!-- CONTEÚDO REAL (COMEÇA ESCONDIDO) -->
+    <div id="content" hidden class="card">
+      <h1>Feliz aniversário!</h1>
+      <p style="line-height:1.5">
+        Coloque aqui sua mensagem, fotos e o que você quiser.
+      </p>
+
+      <!-- Exemplo: -->
+      <!-- <img src="foto1.jpg" style="max-width:100%;border-radius:12px;margin-top:12px"> -->
+      <!-- <a href="surpresa.html">Abrir a surpresa</a> -->
+    </div>
+
   </div>
 
-  <!-- Player -->
-  <div class="player" id="player">
-    <div class="p-left">
-      <img class="p-cover" src="capa_album.jpeg" alt="Capa do álbum" onerror="this.style.display='none'">
-      <div class="p-meta">
-        <div class="p-title">Campari</div>
-        <div class="p-artist">Yunk Vino, 808 Luke</div>
-      </div>
-    </div>
+<script>
+  // === AJUSTE AQUI ===
+  // Fuso de SP: -03:00 (você já está usando isso)
+  const START_ISO  = "2026-02-03T00:00:00-03:00";
+  const UNLOCK_ISO = "2026-02-12T00:00:00-03:00";
+  // ===================
 
-    <div class="p-mid">
-      <button class="p-btn" id="playBtn" aria-label="Tocar/pausar">▶</button>
+  const $lock = document.querySelector("#lock");
+  const $content = document.querySelector("#content");
+  const $fill = document.querySelector("#fill");
+  const $left = document.querySelector("#left");
+  const $target = document.querySelector("#target");
 
-      <div class="p-bar">
-        <span class="p-time" id="curTime">0:00</span>
-        <div class="p-progress" id="progress" aria-label="Progresso">
-          <div class="p-fill" id="fill"></div>
-        </div>
-        <span class="p-time" id="durTime">0:00</span>
-      </div>
-    </div>
-  </div>
+  const startMs  = new Date(START_ISO).getTime();
+  const unlockMs = new Date(UNLOCK_ISO).getTime();
 
-  <audio id="audio" preload="metadata">
-    <source src="musica.mp3" type="audio/mpeg">
-  </audio>
+  function pad(n){ return String(n).padStart(2,"0"); }
+  function fmt(ms){
+    const s = Math.max(0, Math.floor(ms / 1000));
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const ss = s % 60;
+    return `${d}d ${pad(h)}h ${pad(m)}m ${pad(ss)}s`;
+  }
 
-  <script>
-    // Vermelho aumenta conforme scroll (controla --tint)
-    window.addEventListener('scroll', () => {
-      const denom = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-      const p = window.scrollY / denom;               // 0..1
-      const tint = (0.12 + p * 0.55).toFixed(3);      // 0.12..0.67
-      document.documentElement.style.setProperty('--tint', tint);
-    });
+  function unlock(){
+    $lock.style.display = "none";
+    $content.hidden = false; // tira o hidden e aparece [web:260]
+  }
 
-    const cards = document.querySelectorAll('.card');
+  function tick(){
+    const now = Date.now();
 
-    // reveal
-    if (!('IntersectionObserver' in window)) {
-      document.body.classList.add('no-io');
-    } else {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) entry.target.classList.add('reveal');
-        });
-      }, { threshold: 0.1 });
+    // percent da barra (de START até UNLOCK)
+    const total = Math.max(1, unlockMs - startMs);
+    const done  = Math.min(total, Math.max(0, now - startMs));
+    const pct   = Math.max(0, Math.min(100, (done / total) * 100));
+    $fill.style.width = pct.toFixed(2) + "%";
 
-      cards.forEach(card => observer.observe(card));
+    if(now >= unlockMs){
+      unlock();
+      return;
     }
 
-    // overlay (animação)
-    const overlay = document.getElementById('overlay');
-    const overlayImg = document.getElementById('overlayImg');
-    const overlayText = document.getElementById('overlayText');
-    const closeBtn = document.getElementById('closeBtn');
+    $left.textContent = "Falta: " + fmt(unlockMs - now);
+  }
 
-    function openOverlay(imgSrc, text){
-      overlayImg.src = imgSrc;
-      overlayText.textContent = text || '';
-      overlay.classList.add('show');
-      overlay.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
+  // mostra data alvo em pt-BR
+  $target.textContent = "Libera em: " + new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short"
+  }).format(new Date(UNLOCK_ISO));
 
-    function closeOverlay(){
-      overlay.classList.remove('show');
-      overlay.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      setTimeout(() => { overlayImg.src = ''; }, 260);
-    }
-
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const img = card.querySelector('img');
-        openOverlay(img.src, card.getAttribute('data-frase'));
-      });
-    });
-
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeOverlay();
-    });
-    closeBtn.addEventListener('click', closeOverlay);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeOverlay();
-    });
-
-    // Player
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('playBtn');
-    const fill = document.getElementById('fill');
-    const progress = document.getElementById('progress');
-    const curTime = document.getElementById('curTime');
-    const durTime = document.getElementById('durTime');
-
-    function fmt(t){
-      if (!isFinite(t)) return '0:00';
-      const m = Math.floor(t/60);
-      const s = Math.floor(t%60).toString().padStart(2,'0');
-      return `${m}:${s}`;
-    }
-
-    audio.addEventListener('loadedmetadata', () => {
-      durTime.textContent = fmt(audio.duration);
-    });
-
-    audio.addEventListener('timeupdate', () => { // atualiza progresso pelo timeupdate
-      curTime.textContent = fmt(audio.currentTime);
-      const pct = (audio.currentTime / (audio.duration || 1)) * 100;
-      fill.style.width = `${pct}%`;
-    });
-
-    async function toggle(){
-      try{
-        if (audio.paused){
-          await audio.play();
-          playBtn.textContent = '⏸';
-        } else {
-          audio.pause();
-          playBtn.textContent = '▶';
-        }
-      } catch (e){
-        playBtn.textContent = '▶';
-      }
-    }
-
-    playBtn.addEventListener('click', toggle);
-    playBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggle(); }, { passive:false });
-
-    progress.addEventListener('click', (e) => {
-      const rect = progress.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const pct = Math.max(0, Math.min(1, x / rect.width));
-      audio.currentTime = (audio.duration || 0) * pct;
-    });
-  </script>
+  tick();
+  setInterval(tick, 1000); // atualiza a cada 1s [web:244]
+</script>
 </body>
 </html>
