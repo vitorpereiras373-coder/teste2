@@ -3,55 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossa História - Maria Eduarda</title>
+    <title>Para Maria Eduarda</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            margin: 0; padding: 0; background: #121212; color: white;
-            font-family: 'Montserrat', sans-serif;
+        body { 
+            margin: 0; padding: 0; background: #121212; color: white; 
+            font-family: 'Montserrat', sans-serif; 
         }
 
-        header { padding: 60px 20px; text-align: center; background: linear-gradient(to bottom, #2a1b3d, #121212); }
+        header { padding: 60px 20px; text-align: center; }
 
+        /* GRADE DE FOTOS SEMPRE VISÍVEL */
         .galeria { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 20px; padding: 40px; max-width: 1200px; margin: 0 auto; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; padding: 30px; max-width: 1200px; margin: 0 auto; 
         }
 
         .card { 
-            background: #282828; padding: 10px; border-radius: 8px; 
-            cursor: pointer; transition: 0.3s;
-            border: 1px solid #333; /* Borda para debug */
+            background: #282828; padding: 12px; border-radius: 12px; 
+            cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            /* Removido o opacity: 0 para as fotos não ficarem ocultas */
+            opacity: 1 !important; 
+            transform: none !important;
         }
-        .card:hover { transform: scale(1.05); border-color: #1DB954; }
-        .card img { width: 100%; border-radius: 4px; display: block; background: #444; min-height: 200px; }
 
-        /* OVERLAY DO ZOOM */
+        .card:hover { transform: scale(1.03); background: #333; }
+        .card img { width: 100%; border-radius: 6px; display: block; }
+
+        /* OVERLAY DO ZOOM (O CLOSE) */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 10000;
+            z-index: 10000; cursor: pointer;
         }
-        #overlay img { max-width: 90%; max-height: 75vh; border-radius: 8px; }
-        #overlay-text { margin-top: 20px; font-size: 1.5rem; text-align: center; padding: 0 20px; color: #1DB954; }
+
+        #overlay img { 
+            max-width: 90%; max-height: 70vh; 
+            border-radius: 10px; border: 1px solid #444;
+            animation: surgir 0.3s ease-out;
+        }
+
+        #overlay-text { 
+            margin-top: 25px; font-size: 1.5rem; text-align: center; 
+            max-width: 85%; color: #1DB954; font-weight: 700; 
+        }
+
+        @keyframes surgir { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
     <header>
         <h1>Nossa História</h1>
-        <p>Toque na foto para ver a mensagem</p>
+        <p style="color: #b3b3b3;">Toque nas fotos para ler as mensagens</p>
     </header>
 
     <div class="galeria">
-        <div class="card" data-frase="Nossa primeira lembrança."><img src="foto1.jpeg"></div>
-        <div class="card" data-frase="Mais um momento especial."><img src="foto2.jpeg"></div>
-        <div class="card" data-frase="Adoro esse seu sorriso."><img src="foto3.jpeg"></div>
-        <div class="card" data-frase="Sempre juntos."><img src="foto4.jpeg"></div>
-        <div class="card" data-frase="Onde tudo começou."><img src="foto5.jpeg"></div>
+        <div class="card" data-frase="Frase 1"><img src="foto1.jpeg"></div>
+        <div class="card" data-frase="Frase 2"><img src="foto2.jpeg"></div>
+        <div class="card" data-frase="Frase 3"><img src="foto3.jpeg"></div>
+        <div class="card" data-frase="Frase 4"><img src="foto4.jpeg"></div>
+        <div class="card" data-frase="Frase 5"><img src="foto5.jpeg"></div>
+        
         <div class="card" data-frase="E que daqui uns anos sejamos nós dois."><img src="foto6.jpeg"></div>
+        
         <div class="card" data-frase="Frase 7"><img src="foto7.jpeg"></div>
         <div class="card" data-frase="Frase 8"><img src="foto8.jpeg"></div>
         <div class="card" data-frase="Frase 9"><img src="foto9.jpeg"></div>
@@ -60,19 +77,26 @@
     </div>
 
     <div id="overlay" onclick="this.style.display='none'">
-        <img id="overlay-img" src="">
+        <img id="overlay-img">
         <div id="overlay-text"></div>
-        <p style="margin-top: 20px; color: #888;">(Toque para fechar)</p>
+        <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">(Clique em qualquer lugar para fechar)</p>
     </div>
 
     <script>
-        document.querySelectorAll('.card').forEach(card => {
+        // Lógica de abrir o zoom
+        const cards = document.querySelectorAll('.card');
+        const overlay = document.getElementById('overlay');
+        const overlayImg = document.getElementById('overlay-img');
+        const overlayText = document.getElementById('overlay-text');
+
+        cards.forEach(card => {
             card.onclick = () => {
-                const img = card.querySelector('img').src;
-                const txt = card.getAttribute('data-frase');
-                document.getElementById('overlay-img').src = img;
-                document.getElementById('overlay-text').innerText = txt;
-                document.getElementById('overlay').style.display = 'flex';
+                const imagemSrc = card.querySelector('img').src;
+                const mensagem = card.getAttribute('data-frase');
+                
+                overlayImg.src = imagemSrc;
+                overlayText.innerText = mensagem;
+                overlay.style.display = 'flex';
             };
         });
     </script>
