@@ -4,172 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Maria Eduarda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --spotify-green: #1DB954;
-            --bg-gradient: linear-gradient(180deg, #050505 0%, #121212 100%);
-            --glass: rgba(255, 255, 255, 0.08);
+            --spotify-black: #121212;
+            --spotify-light: #282828;
+            --accent: #1DB954;
         }
 
         body {
-            background: var(--bg-gradient);
+            margin: 0;
             color: white;
             font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding-bottom: 120px; /* Espaço para o player */
+            /* Degradê dinâmico que muda com o scroll */
+            background: linear-gradient(180deg, #1e1e2e 0%, #2a1b3d 33%, #44318d 66%, #8265a7 100%);
+            background-attachment: fixed;
+            transition: background 0.5s ease;
+            padding-bottom: 110px;
         }
 
         header {
-            padding: 60px 20px;
-            text-align: center;
-        }
-
-        header h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        /* Grade de Fotos - Responsiva para Celular */
-        .galeria {
+            height: 60vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 40px;
-            padding: 0 20px;
+            text-align: center;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+        }
+
+        header h1 { font-size: 3rem; margin: 0; letter-spacing: -1px; }
+        header p { color: #b3b3b3; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; }
+
+        .galeria {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
         .card {
-            background: var(--glass);
-            border-radius: 12px;
-            padding: 12px;
-            width: 100%;
-            max-width: 380px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 60px;
+            transition: transform 0.3s ease, background 0.3s ease;
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.9s ease-out;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(30px);
         }
 
-        .card.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .card.reveal { opacity: 1; transform: translateY(0); }
+
+        .card:hover { background: rgba(255,255,255,0.1); }
 
         .card img {
             width: 100%;
-            border-radius: 8px;
-            transition: transform 0.4s ease;
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
-        .card:hover img {
-            transform: scale(1.02);
-        }
-
-        /* Player Estilo Spotify Identico */
-        .spotify-footer {
+        /* Player Identico ao Spotify */
+        .spotify-player {
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100%;
+            right: 0;
+            height: 90px;
             background: #000;
             border-top: 1px solid #282828;
-            padding: 10px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 9999;
-            box-sizing: border-box;
-        }
-
-        .player-main {
             display: flex;
             align-items: center;
-            width: 100%;
             justify-content: space-between;
+            padding: 0 16px;
+            z-index: 1000;
         }
 
-        .info-musica {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 30%;
-        }
-
-        .capa-album {
-            width: 50px;
-            height: 50px;
+        .track-info { display: flex; align-items: center; width: 30%; }
+        
+        .album-art {
+            width: 56px;
+            height: 56px;
             border-radius: 4px;
-            background: #282828;
+            margin-right: 14px;
+            object-fit: cover;
         }
 
-        .texto-musica h4 { margin: 0; font-size: 0.9rem; }
-        .texto-musica p { margin: 0; font-size: 0.75rem; color: #b3b3b3; }
+        .track-details h4 { margin: 0; font-size: 0.9rem; font-weight: 400; }
+        .track-details p { margin: 0; font-size: 0.75rem; color: #b3b3b3; }
 
-        .controles {
+        .player-controls {
             flex: 1;
+            max-width: 40%;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .btn-play {
+        .main-buttons { display: flex; align-items: center; gap: 24px; margin-bottom: 8px; }
+
+        .play-pause-btn {
+            width: 32px;
+            height: 32px;
             background: white;
-            border: none;
-            width: 35px;
-            height: 35px;
             border-radius: 50%;
-            cursor: pointer;
+            border: none;
             display: flex;
-            align-items: center;
             justify-content: center;
-            transition: transform 0.2s;
+            align-items: center;
+            cursor: pointer;
         }
 
-        .btn-play:hover { transform: scale(1.1); }
-
-        /* Barra de Progresso Fina */
-        .barra-progresso-total {
+        .progress-container {
             width: 100%;
-            max-width: 450px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            color: #b3b3b3;
+        }
+
+        .progress-bar {
+            flex: 1;
             height: 4px;
             background: #4f4f4f;
-            margin-top: 10px;
             border-radius: 2px;
-            cursor: pointer;
+            position: relative;
         }
 
-        .progresso-atual {
+        #progress-fill {
             height: 100%;
             background: white;
             width: 0%;
             border-radius: 2px;
-            transition: width 0.1s linear;
-        }
-
-        .progresso-atual:after {
-            content: '';
-            position: absolute;
-            right: 0;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            display: none;
         }
 
         @media (max-width: 600px) {
-            .info-musica { width: 60%; }
+            .track-info { width: 60%; }
+            .player-controls { position: absolute; top: -5px; left: 0; width: 100%; max-width: 100%; }
+            .progress-container { padding: 0; }
+            .main-buttons { margin-top: 15px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Nossa História</h1>
-        <p style="color: #b3b3b3; font-weight: 300;">1 ano ao teu lado</p>
+        <p>Playlist</p>
+        <h1>Para Maria Eduarda</h1>
     </header>
 
     <div class="galeria">
@@ -186,60 +166,77 @@
         <div class="card"><img src="foto11.jpeg"></div>
     </div>
 
-    <div class="spotify-footer">
-        <div class="player-main">
-            <div class="info-musica">
-                <img src="foto1.jpeg" class="capa-album">
-                <div class="texto-musica">
-                    <h4>11 - Campari</h4>
-                    <p>Vitor</p>
-                </div>
+    <div class="spotify-player">
+        <div class="track-info">
+            <img src="capa_album.jpeg" class="album-art" alt="Capa">
+            <div class="track-details">
+                <h4>Campari</h4>
+                <p>Vitor</p>
             </div>
-
-            <div class="controles">
-                <button class="btn-play" id="btnPlay">
-                    <span id="iconePlay" style="color: black; font-size: 1.2rem;">▶</span>
-                </button>
-                <div class="barra-progresso-total" id="barraTotal">
-                    <div class="progresso-atual" id="barraProgresso"></div>
-                </div>
-            </div>
-            
-            <div style="width: 30%;"></div>
+            <span style="color: var(--accent); margin-left: 15px; font-size: 1.2rem;">♥</span>
         </div>
+
+        <div class="player-controls">
+            <div class="main-buttons">
+                <button class="play-pause-btn" id="btnPlay">
+                    <span id="playIcon" style="color: black; font-size: 1rem;">▶</span>
+                </button>
+            </div>
+            <div class="progress-container">
+                <span id="currentTime">0:00</span>
+                <div class="progress-bar">
+                    <div id="progress-fill"></div>
+                </div>
+                <span id="duration">0:00</span>
+            </div>
+        </div>
+
+        <div style="width: 30%;"></div>
     </div>
 
-    <audio id="musica" loop>
+    <audio id="audio" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const audio = document.getElementById('musica');
+        const audio = document.getElementById('audio');
         const btnPlay = document.getElementById('btnPlay');
-        const iconePlay = document.getElementById('iconePlay');
-        const barraProgresso = document.getElementById('barraProgresso');
+        const playIcon = document.getElementById('playIcon');
+        const progressFill = document.getElementById('progress-fill');
 
-        // Toggle Play/Pause
+        // Botão Play/Pause
         btnPlay.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
-                iconePlay.innerText = '⏸';
+                playIcon.innerText = 'II';
             } else {
                 audio.pause();
-                iconePlay.innerText = '▶';
+                playIcon.innerText = '▶';
             }
         });
 
-        // Atualiza Barra
+        // Atualizar barra e tempo
         audio.addEventListener('timeupdate', () => {
-            const perc = (audio.currentTime / audio.duration) * 100;
-            barraProgresso.style.width = perc + '%';
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = progress + '%';
+            
+            let curMins = Math.floor(audio.currentTime / 60);
+            let curSecs = Math.floor(audio.currentTime - curMins * 60);
+            if(curSecs < 10) curSecs = "0" + curSecs;
+            document.getElementById('currentTime').innerText = curMins + ":" + curSecs;
         });
 
-        // Efeito de aparecer as fotos ao rolar
+        audio.addEventListener('loadedmetadata', () => {
+            let durMins = Math.floor(audio.duration / 60);
+            let durSecs = Math.floor(audio.duration - durMins * 60);
+            if(durSecs < 10) durSecs = "0" + durSecs;
+            document.getElementById('duration').innerText = durMins + ":" + durSecs;
+        });
+
+        // Efeito Reveal das fotos
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('show');
+                if (entry.isIntersecting) entry.target.classList.add('reveal');
             });
         }, { threshold: 0.1 });
 
