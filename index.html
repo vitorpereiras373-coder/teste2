@@ -21,8 +21,40 @@
     p{ margin:0; }
     .muted{ color:var(--muted); }
     .sp{ height:14px; }
-    .bar{ height:14px; background:var(--barbg); border:1px solid var(--border); border-radius:999px; overflow:hidden; }
-    .fill{ height:100%; width:0%; background:var(--grad); transition:width .25s; }
+
+    /* Barra */
+    .bar{
+      height:14px;
+      background:var(--barbg);
+      border:1px solid var(--border);
+      border-radius:999px;
+      overflow:hidden;
+      position:relative; /* necessário pro gatinho posicionar dentro */
+    }
+    .fill{
+      height:100%;
+      width:0%;
+      background:var(--grad);
+      transition:width .25s;
+    }
+
+    /* Gatinho “correndo” */
+    .runner{
+      position:absolute;
+      top:50%;
+      transform:translate(-50%,-65%);
+      font-size:18px;
+      pointer-events:none;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,.6));
+      animation: hop .6s infinite ease-in-out;
+      z-index:2;
+      user-select:none;
+    }
+    @keyframes hop{
+      0%,100% { transform: translate(-50%,-65%) translateY(0); }
+      50%     { transform: translate(-50%,-65%) translateY(-4px); }
+    }
+
     .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px; }
     .pill{ display:inline-block; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:var(--barbg); }
     #content[hidden]{ display:none; }
@@ -38,7 +70,11 @@
       <p class="muted">Quando chegar o dia, libera automaticamente.</p>
 
       <div class="sp"></div>
-      <div class="bar"><div id="fill" class="fill"></div></div>
+
+      <div class="bar">
+        <div id="fill" class="fill"></div>
+        <div id="runner" class="runner">🐱</div>
+      </div>
 
       <div class="row">
         <span class="pill" id="left">Carregando…</span>
@@ -47,7 +83,7 @@
 
       <div class="sp"></div>
       <p class="muted" style="line-height:1.4">
-        Se você quiser, escreve aqui um textinho curto/fofo enquanto ela espera.
+        Acredite, eu estou mais ansioso que você, meu docinho
       </p>
     </div>
 
@@ -57,17 +93,12 @@
       <p style="line-height:1.5">
         Coloque aqui sua mensagem, fotos e o que você quiser.
       </p>
-
-      <!-- Exemplo: -->
-      <!-- <img src="foto1.jpg" style="max-width:100%;border-radius:12px;margin-top:12px"> -->
-      <!-- <a href="surpresa.html">Abrir a surpresa</a> -->
     </div>
 
   </div>
 
 <script>
   // === AJUSTE AQUI ===
-  // Fuso de SP: -03:00 (você já está usando isso)
   const START_ISO  = "2026-02-03T00:00:00-03:00";
   const UNLOCK_ISO = "2026-02-12T00:00:00-03:00";
   // ===================
@@ -77,6 +108,7 @@
   const $fill = document.querySelector("#fill");
   const $left = document.querySelector("#left");
   const $target = document.querySelector("#target");
+  const $runner = document.querySelector("#runner");
 
   const startMs  = new Date(START_ISO).getTime();
   const unlockMs = new Date(UNLOCK_ISO).getTime();
@@ -93,17 +125,24 @@
 
   function unlock(){
     $lock.style.display = "none";
-    $content.hidden = false; // tira o hidden e aparece [web:260]
+    $content.hidden = false;
   }
+
+  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
 
   function tick(){
     const now = Date.now();
 
-    // percent da barra (de START até UNLOCK)
     const total = Math.max(1, unlockMs - startMs);
     const done  = Math.min(total, Math.max(0, now - startMs));
-    const pct   = Math.max(0, Math.min(100, (done / total) * 100));
+    const pct   = clamp((done / total) * 100, 0, 100);
+
     $fill.style.width = pct.toFixed(2) + "%";
+
+    // move o gatinho junto com o preenchimento
+    // (tira um pouco nas bordas pra não cortar pelo overflow)
+    const safePct = clamp(pct, 2, 98);
+    $runner.style.left = safePct.toFixed(2) + "%";
 
     if(now >= unlockMs){
       unlock();
@@ -113,14 +152,13 @@
     $left.textContent = "Falta: " + fmt(unlockMs - now);
   }
 
-  // mostra data alvo em pt-BR
   $target.textContent = "Libera em: " + new Intl.DateTimeFormat("pt-BR", {
     dateStyle: "short",
     timeStyle: "short"
   }).format(new Date(UNLOCK_ISO));
 
   tick();
-  setInterval(tick, 1000); // atualiza a cada 1s [web:244]
+  setInterval(tick, 1000);
 </script>
 </body>
 </html>
