@@ -46,7 +46,7 @@
 
     h1{
       margin:0;
-      font-size:2.2rem;
+      font-size:2.05rem;
       background: linear-gradient(45deg, #fff, var(--romantic));
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
@@ -55,16 +55,17 @@
 
     .subtitle{
       margin:10px 0 0;
-      color:#d0d0d0;
+      color:#e3e3e3;
       font-size:1rem;
       letter-spacing:1px;
+      opacity:0.92;
     }
 
-    /* FEED (uma embaixo da outra) */
+    /* FEED */
     .feed{
       max-width:520px;
       margin:0 auto;
-      padding:18px 14px 60px;
+      padding:18px 14px 140px; /* espaço pro player */
       display:flex;
       flex-direction:column;
       gap:22px;
@@ -161,7 +162,7 @@
       color:var(--romantic);
       font-weight:700;
       text-align:center;
-      font-size:1.15rem;
+      font-size:1.05rem;
       line-height:1.35;
       max-width:92%;
       white-space: pre-wrap;
@@ -177,6 +178,66 @@
       color:#fff;
       font-size:22px;
       cursor:pointer;
+    }
+
+    /* PLAYER estilo Spotify */
+    .player{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 86px;
+      padding: 10px 14px;
+      box-sizing: border-box;
+      z-index: 9998;
+
+      background: rgba(0,0,0,0.72);
+      border-top: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(6px);
+
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .p-left{ display:flex; align-items:center; gap:12px; min-width: 220px; }
+    .p-cover{ width:56px; height:56px; border-radius:10px; object-fit: cover; border:1px solid rgba(255,255,255,0.12); }
+    .p-meta{ display:flex; flex-direction:column; gap:4px; }
+    .p-title{ font-weight:700; font-size:0.95rem; line-height:1.1; }
+    .p-artist{ font-size:0.78rem; color:#cfcfcf; opacity:0.9; }
+
+    .p-mid{ flex:1; display:flex; flex-direction:column; align-items:center; gap:10px; max-width: 560px; }
+    .p-btn{
+      width:40px; height:40px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: white;
+      color: black;
+      font-weight: 800;
+    }
+
+    .p-bar{ width:100%; display:flex; align-items:center; gap:10px; }
+    .p-time{ width:44px; text-align:center; font-size:0.75rem; color:#d9d9d9; opacity:0.9; }
+
+    .p-progress{
+      flex:1;
+      height: 6px;
+      background: rgba(255,255,255,0.20);
+      border-radius: 999px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .p-fill{
+      height:100%;
+      width: 0%;
+      background: var(--romantic);
+    }
+
+    @media (max-width: 600px){
+      h1{ font-size:1.55rem; }
+      .p-left{ min-width: 150px; }
+      .p-artist{ display:none; }
+      .p-time{ width:40px; }
     }
 
     /* Se não suportar IntersectionObserver, não esconda */
@@ -206,6 +267,7 @@
     <div class="hint">Dica: clique/toque em uma foto para abrir em tela cheia</div>
   </main>
 
+  <!-- Overlay -->
   <div id="overlay" aria-hidden="true">
     <button id="closeBtn" aria-label="Fechar">×</button>
     <div id="overlayBox">
@@ -213,6 +275,33 @@
       <div id="overlayText"></div>
     </div>
   </div>
+
+  <!-- Player -->
+  <div class="player" id="player">
+    <div class="p-left">
+      <img class="p-cover" src="capa_album.jpeg" alt="Capa do álbum" onerror="this.style.display='none'">
+      <div class="p-meta">
+        <div class="p-title">Campari</div>
+        <div class="p-artist">Yunk Vino, 808 Luke</div>
+      </div>
+    </div>
+
+    <div class="p-mid">
+      <button class="p-btn" id="playBtn" aria-label="Tocar/pausar">▶</button>
+
+      <div class="p-bar">
+        <span class="p-time" id="curTime">0:00</span>
+        <div class="p-progress" id="progress" aria-label="Progresso">
+          <div class="p-fill" id="fill"></div>
+        </div>
+        <span class="p-time" id="durTime">0:00</span>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata">
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
 
   <script>
     // Vermelho aumenta conforme scroll (controla --tint)
@@ -269,11 +358,58 @@
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay) closeOverlay();
     });
-
     closeBtn.addEventListener('click', closeOverlay);
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeOverlay();
+    });
+
+    // Player
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('playBtn');
+    const fill = document.getElementById('fill');
+    const progress = document.getElementById('progress');
+    const curTime = document.getElementById('curTime');
+    const durTime = document.getElementById('durTime');
+
+    function fmt(t){
+      if (!isFinite(t)) return '0:00';
+      const m = Math.floor(t/60);
+      const s = Math.floor(t%60).toString().padStart(2,'0');
+      return `${m}:${s}`;
+    }
+
+    audio.addEventListener('loadedmetadata', () => {
+      durTime.textContent = fmt(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => { // atualiza progresso pelo timeupdate
+      curTime.textContent = fmt(audio.currentTime);
+      const pct = (audio.currentTime / (audio.duration || 1)) * 100;
+      fill.style.width = `${pct}%`;
+    });
+
+    async function toggle(){
+      try{
+        if (audio.paused){
+          await audio.play();
+          playBtn.textContent = '⏸';
+        } else {
+          audio.pause();
+          playBtn.textContent = '▶';
+        }
+      } catch (e){
+        playBtn.textContent = '▶';
+      }
+    }
+
+    playBtn.addEventListener('click', toggle);
+    playBtn.addEventListener('touchstart', (e) => { e.preventDefault(); toggle(); }, { passive:false });
+
+    progress.addEventListener('click', (e) => {
+      const rect = progress.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, x / rect.width));
+      audio.currentTime = (audio.duration || 0) * pct;
     });
   </script>
 </body>
