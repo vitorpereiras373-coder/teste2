@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +13,6 @@
 
         header { padding: 60px 20px; text-align: center; }
 
-        /* GRADE DE FOTOS SEMPRE VISÍVEL */
         .galeria { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
@@ -23,20 +22,20 @@
         .card { 
             background: #282828; padding: 12px; border-radius: 12px; 
             cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            /* Removido o opacity: 0 para as fotos não ficarem ocultas */
             opacity: 1 !important; 
-            transform: none !important;
         }
 
         .card:hover { transform: scale(1.03); background: #333; }
-        .card img { width: 100%; border-radius: 6px; display: block; }
+        .card img { 
+            width: 100%; height: 250px; object-fit: cover; 
+            border-radius: 6px; display: block; 
+        }
 
-        /* OVERLAY DO ZOOM (O CLOSE) */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95);
             display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 10000; cursor: pointer;
+            z-index: 10000;
         }
 
         #overlay img { 
@@ -50,7 +49,16 @@
             max-width: 85%; color: #1DB954; font-weight: 700; 
         }
 
-        @keyframes surgir { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        #close-btn {
+            position: absolute; top: 20px; right: 30px;
+            background: none; border: none; color: white;
+            font-size: 2rem; cursor: pointer; z-index: 10001;
+        }
+
+        @keyframes surgir { 
+            from { transform: scale(0.9); opacity: 0; } 
+            to { transform: scale(1); opacity: 1; } 
+        }
     </style>
 </head>
 <body>
@@ -61,44 +69,57 @@
     </header>
 
     <div class="galeria">
-        <div class="card" data-frase="Frase 1"><img src="foto1.jpeg"></div>
-        <div class="card" data-frase="Frase 2"><img src="foto2.jpeg"></div>
-        <div class="card" data-frase="Frase 3"><img src="foto3.jpeg"></div>
-        <div class="card" data-frase="Frase 4"><img src="foto4.jpeg"></div>
-        <div class="card" data-frase="Frase 5"><img src="foto5.jpeg"></div>
-        
-        <div class="card" data-frase="E que daqui uns anos sejamos nós dois."><img src="foto6.jpeg"></div>
-        
-        <div class="card" data-frase="Frase 7"><img src="foto7.jpeg"></div>
-        <div class="card" data-frase="Frase 8"><img src="foto8.jpeg"></div>
-        <div class="card" data-frase="Frase 9"><img src="foto9.jpeg"></div>
-        <div class="card" data-frase="Frase 10"><img src="foto10.jpeg"></div>
-        <div class="card" data-frase="Frase 11"><img src="foto11.jpeg"></div>
+        <!-- SUBSTITUA pelos nomes reais dos seus arquivos no GitHub -->
+        <div class="card" data-frase="Frase 1">
+            <img src="foto1.jpg" alt="Foto 1">
+        </div>
+        <div class="card" data-frase="Frase 2">
+            <img src="foto2.jpg" alt="Foto 2">
+        </div>
+        <div class="card" data-frase="Frase 3">
+            <img src="foto3.jpg" alt="Foto 3">
+        </div>
+        <div class="card" data-frase="Frase 4">
+            <img src="foto4.jpg" alt="Foto 4">
+        </div>
+        <div class="card" data-frase="Frase 5">
+            <img src="foto5.jpg" alt="Foto 5">
+        </div>
+        <div class="card" data-frase="E que daqui uns anos sejamos nós dois.">
+            <img src="foto6.jpg" alt="Foto 6">
+        </div>
+        <div class="card" data-frase="Frase 7">
+            <img src="foto7.jpg" alt="Foto 7">
+        </div>
+        <div class="card" data-frase="Frase 8">
+            <img src="foto8.jpg" alt="Foto 8">
+        </div>
+        <div class="card" data-frase="Frase 9">
+            <img src="foto9.jpg" alt="Foto 9">
+        </div>
+        <div class="card" data-frase="Frase 10">
+            <img src="foto10.jpg" alt="Foto 10">
+        </div>
+        <div class="card" data-frase="Frase 11">
+            <img src="foto11.jpg" alt="Foto 11">
+        </div>
     </div>
 
-    <div id="overlay" onclick="this.style.display='none'">
+    <div id="overlay">
+        <button id="close-btn">&times;</button>
         <img id="overlay-img">
         <div id="overlay-text"></div>
-        <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">(Clique em qualquer lugar para fechar)</p>
+        <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">
+            (Clique em qualquer lugar para fechar)
+        </p>
     </div>
 
     <script>
-        // Lógica de abrir o zoom
         const cards = document.querySelectorAll('.card');
         const overlay = document.getElementById('overlay');
         const overlayImg = document.getElementById('overlay-img');
         const overlayText = document.getElementById('overlay-text');
+        const closeBtn = document.getElementById('close-btn');
 
-        cards.forEach(card => {
-            card.onclick = () => {
-                const imagemSrc = card.querySelector('img').src;
-                const mensagem = card.getAttribute('data-frase');
-                
-                overlayImg.src = imagemSrc;
-                overlayText.innerText = mensagem;
-                overlay.style.display = 'flex';
-            };
-        });
-    </script>
-</body>
-</html>
+        // Abrir overlay
+        cards.forEach(card 
