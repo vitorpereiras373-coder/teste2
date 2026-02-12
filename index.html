@@ -1,164 +1,103 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>parasempre…</title>
+  <title>Para sempre…</title>
   <style>
-    :root{
-      --bg:#0b0f19;
-      --card:#121a2e;
-      --border:#223055;
-      --text:#e8eefc;
-      --muted:#aab6d6;
-      --barbg:#0a1020;
-      --grad: linear-gradient(90deg,#6a7dff,#c86bff);
+    :root {
+      --bg: #0b0f19;
+      --card: #121a2e;
+      --border: #223055;
+      --text: #e8eefc;
+      --muted: #aab6d6;
+      --barbg: #0a1020;
+      --grad: linear-gradient(90deg, #6a7dff, #c86bff);
+      --orange: #FF8200;
     }
-    body{ margin:0; font-family:system-ui, Arial; background:var(--bg); color:var(--text); }
-    .wrap{ max-width:820px; margin:0 auto; padding:28px 18px; }
-    .card{ background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px; }
-    h1{ margin:0 0 8px 0; font-size:28px; }
-    p{ margin:0; }
-    .muted{ color:var(--muted); }
-    .sp{ height:14px; }
+    body { margin: 0; font-family: 'Roboto Mono', monospace, Arial; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 28px 18px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    
+    h1 { margin: 0 0 15px 0; font-size: 32px; color: #fff; text-shadow: 0 0 10px rgba(106, 125, 255, 0.5); }
+    p { margin: 0; line-height: 1.6; }
+    .muted { color: var(--muted); font-size: 0.9rem; }
+    .sp { height: 20px; }
 
-    /* Barra */
-    .bar{
-      height:14px;
-      background:var(--barbg);
-      border:1px solid var(--border);
-      border-radius:999px;
-      overflow:hidden;
-      position:relative; /* necessário pro gatinho posicionar dentro */
+    /* Estilo de Apresentação Vitor Reaper */
+    .highlight { color: var(--orange); font-weight: bold; }
+    
+    /* Grid para fotos ou mensagens extras */
+    .grid-fotos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
     }
-    .fill{
-      height:100%;
-      width:0%;
-      background:var(--grad);
-      transition:width .25s;
-    }
-
-    /* Gatinho “correndo” */
-    .runner{
-      position:absolute;
-      top:50%;
-      transform:translate(-50%,-65%);
-      font-size:18px;
-      pointer-events:none;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,.6));
-      animation: hop .6s infinite ease-in-out;
-      z-index:2;
-      user-select:none;
-    }
-    @keyframes hop{
-      0%,100% { transform: translate(-50%,-65%) translateY(0); }
-      50%     { transform: translate(-50%,-65%) translateY(-4px); }
+    .foto-placeholder {
+      background: var(--barbg);
+      border: 1px dashed var(--border);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
     }
 
-    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px; }
-    .pill{ display:inline-block; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:var(--barbg); }
-    #content[hidden]{ display:none; }
+    /* Animação de entrada */
+    #content {
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <!-- TELA BLOQUEADA -->
-    <div id="lock" class="card">
-      <h1>Falta pouco…</h1>
-      <p class="muted">Quando chegar o dia, libera automaticamente.</p>
-
-      <div class="sp"></div>
-
-      <div class="bar">
-        <div id="fill" class="fill"></div>
-        <div id="runner" class="runner">🐱</div>
-      </div>
-
-      <div class="row">
-        <span class="pill" id="left">Carregando…</span>
-        <span class="pill muted" id="target"></span>
-      </div>
-
-      <div class="sp"></div>
-      <p class="muted" style="line-height:1.4">
-        Acredite, eu estou mais ansioso que você, meu docinho
+    <div id="content" class="card">
+      <h1>Feliz Aniversário, <span style="color: var(--grad);">Maria Eduarda!</span> 🎂</h1>
+      
+      <p>
+        Hoje é o seu dia, e eu não poderia deixar passar sem usar um pouco do que estou aprendendo na engenharia para te fazer uma surpresa. 
       </p>
-    </div>
 
-    <!-- CONTEÚDO REAL (COMEÇA ESCONDIDO) -->
-    <div id="content" hidden class="card">
-      <h1>Feliz aniversário!</h1>
-      <p style="line-height:1.5">
-        Coloque aqui sua mensagem, fotos e o que você quiser.
+      <div class="sp"></div>
+
+      <p>
+        Como você sabe, eu me chamo <span class="highlight">Vitor</span>, tenho 20 anos e curso Engenharia de Controle e Automação no IFSP. Enquanto eu quebro a cabeça com matemática, física e programação C++, você é a parte que traz equilíbrio e felicidade para a minha vida.
+      </p>
+
+      <div class="sp"></div>
+
+      <p>
+        Este site é um pequeno pedaço do meu laboratório, feito especialmente para você. Meu foco é o desenvolvimento de sistemas inteligentes, mas nenhuma ferramenta de auditoria de sinais conseguiria medir o quanto eu te admiro.
+      </p>
+
+      <div class="sp"></div>
+
+      <div class="grid-fotos">
+        <div class="foto-placeholder muted">Espaço para Nossa Foto 1</div>
+        <div class="foto-placeholder muted">Espaço para Nossa Foto 2</div>
+      </div>
+
+      <div class="sp"></div>
+      
+      <p class="muted" style="text-align: center; border-top: 1px solid var(--border); padding-top: 20px;">
+        Aprimorando cada detalhe, ao decorrer do curso e da vida, ao seu lado. <br>
+        <strong>Com amor, seu futuro Engenheiro favorito. ❤️</strong>
       </p>
     </div>
 
   </div>
 
-<script>
-  // === AJUSTE AQUI ===
-  const START_ISO  = "2026-02-03T00:00:00-03:00";
-  const UNLOCK_ISO = "2026-02-12T00:00:00-03:00";
-  // ===================
-
-  const $lock = document.querySelector("#lock");
-  const $content = document.querySelector("#content");
-  const $fill = document.querySelector("#fill");
-  const $left = document.querySelector("#left");
-  const $target = document.querySelector("#target");
-  const $runner = document.querySelector("#runner");
-
-  const startMs  = new Date(START_ISO).getTime();
-  const unlockMs = new Date(UNLOCK_ISO).getTime();
-
-  function pad(n){ return String(n).padStart(2,"0"); }
-  function fmt(ms){
-    const s = Math.max(0, Math.floor(ms / 1000));
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    const ss = s % 60;
-    return `${d}d ${pad(h)}h ${pad(m)}m ${pad(ss)}s`;
-  }
-
-  function unlock(){
-    $lock.style.display = "none";
-    $content.hidden = false;
-  }
-
-  function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
-  function tick(){
-    const now = Date.now();
-
-    const total = Math.max(1, unlockMs - startMs);
-    const done  = Math.min(total, Math.max(0, now - startMs));
-    const pct   = clamp((done / total) * 100, 0, 100);
-
-    $fill.style.width = pct.toFixed(2) + "%";
-
-    // move o gatinho junto com o preenchimento
-    // (tira um pouco nas bordas pra não cortar pelo overflow)
-    const safePct = clamp(pct, 2, 98);
-    $runner.style.left = safePct.toFixed(2) + "%";
-
-    if(now >= unlockMs){
-      unlock();
-      return;
-    }
-
-    $left.textContent = "Falta: " + fmt(unlockMs - now);
-  }
-
-  $target.textContent = "Libera em: " + new Intl.DateTimeFormat("pt-BR", {
-    dateStyle: "short",
-    timeStyle: "short"
-  }).format(new Date(UNLOCK_ISO));
-
-  tick();
-  setInterval(tick, 1000);
-</script>
+  <script>
+    console.log("Sistema Signal Reaper: Conteúdo Desbloqueado com Sucesso.");
+    // Forçamos o display caso o CSS hidden tenha ficado no cache
+    document.getElementById('content').style.display = 'block';
+  </script>
 </body>
 </html>
